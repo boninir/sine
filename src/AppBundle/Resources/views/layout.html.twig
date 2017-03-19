@@ -2,6 +2,14 @@
 
 {% block body %}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+
+        {{ include("AppBundle:Home:header.html.twig") }}
+
+        {% block core %}{% endblock %}
+
+        {{ include("AppBundle:Home:footer.html.twig") }}
+
+    {% endblock %}
 
 {% endblock %}
