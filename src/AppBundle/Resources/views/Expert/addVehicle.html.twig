@@ -14,6 +14,10 @@
 
         {{ form_start(form, {'attr': {'class': 'col-md-11'} }) }}
         {{ form_widget(form) }}
+        <div class="pull-right">
+            <input type="submit" value="Ajouter le véhicule" class="btn btn-success" />
+            <a href="{{ path('expert') }}" class="btn btn-primary">Retour</a>
+        </div>
         {{ form_end(form) }}
     </div>
 </div>

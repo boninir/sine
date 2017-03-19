@@ -6,7 +6,6 @@ use AppBundle\Entity\Vehicle;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExpertController extends Controller
@@ -37,10 +36,6 @@ class ExpertController extends Controller
     {
         $vehicle = new Vehicle();
         $form = $this->createForm(VehicleType::class, $vehicle);
-        $form->add('submit', SubmitType::class, array(
-            'label' => 'Ajouter le véhicule',
-            'attr'  => array('class' => 'btn btn-success pull-right')
-        ));
 
         $form->handleRequest($request);
 
@@ -68,13 +63,35 @@ class ExpertController extends Controller
     /**
      * @Route("/expertise/{id}", name="expertise")
      * @param Vehicle $vehicle
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function processExpertiseAction(Vehicle $vehicle)
+    public function processExpertiseAction(Vehicle $vehicle, Request $request)
     {
+        $form = $this->createForm(VehicleType::class, $vehicle);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $vehicle = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($vehicle);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Les informations ont bien été mises à jour.'
+            );
+
+            return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
+        }
+
         return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
             'vehicle' => $vehicle,
+            'form' => $form->createView(),
         ));
     }
 }
