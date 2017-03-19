@@ -50,9 +50,18 @@
             </ul>
         </div>
 
-        <div class="row text-center center-block">
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="mecanique">1</div>
+        <div class="row">
+            <div class="tab-content text-center">
+                <div role="tabpanel" class="tab-pane active" id="mecanique">
+                    {% for intervention in interventions if intervention.typeIntervention.id == 1 %}
+                        <div class="col-md-5 text-right">
+                            <p><b>{{ intervention.denomination }}</b></p>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="checkbox" value="{{ intervention.id }}" checked data-toggle="toggle" data-on="Oui" data-off="Non" data-onstyle="success" data-offstyle="danger">
+                        </div>
+                    {% endfor %}
+                </div>
                 <div role="tabpanel" class="tab-pane" id="carosserie">2</div>
                 <div role="tabpanel" class="tab-pane" id="interrieur">3</div>
             </div>

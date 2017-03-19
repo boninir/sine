@@ -71,6 +71,9 @@ class ExpertController extends Controller
     public function processExpertiseAction(Vehicle $vehicle, Request $request)
     {
         $form = $this->createForm(VehicleType::class, $vehicle);
+        $interventions = $this->getDoctrine()
+            ->getRepository('AppBundle:Intervention')
+            ->findBy(array('required' => 1));
 
         $form->handleRequest($request);
 
@@ -92,6 +95,7 @@ class ExpertController extends Controller
 
         return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
             'vehicle' => $vehicle,
+            'interventions' => $interventions,
             'form' => $form->createView(),
         ));
     }
