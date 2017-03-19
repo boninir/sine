@@ -56,6 +56,9 @@
                                 <div class="col-md-5">- Bon SAP : {{ vehicle.sapVoucher }}</div>
                             </div>
                             <div class="row">
+                                <div class="col-md-7">- Essence : {{ vehicle.fuel.denomination }}</div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-7"></div>
                                 <div class="col-md-5">
                                     <a href="{{ path('expertise', {'id': vehicle.id}) }}" class="btn btn-primary">

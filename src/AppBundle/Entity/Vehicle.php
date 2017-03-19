@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,6 +67,13 @@ class Vehicle
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="creation_date", type="datetime")
+     */
+    private $creationDate;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
      */
     private $releaseDate;
@@ -91,6 +99,24 @@ class Vehicle
      */
     private $sapVoucher;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fuel")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fuel;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehicleIntervention", mappedBy="vehicle")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $interventions;
+
+
+    public function __construct()
+    {
+        $this->creationDate = new \Datetime();
+        $this->interventions = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -247,6 +273,22 @@ class Vehicle
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
+
+    /**
+     * @param \DateTime $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->creationDate = $creationDate;
+    }
+
+    /**
      * Set releaseDate
      *
      * @param \DateTime $releaseDate
@@ -340,5 +382,57 @@ class Vehicle
     public function getSapVoucher()
     {
         return $this->sapVoucher;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFuel()
+    {
+        return $this->fuel;
+    }
+
+    /**
+     * @param mixed $fuel
+     *
+     * @return Vehicle
+     */
+    public function setFuel($fuel)
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInterventions()
+    {
+        return $this->interventions;
+    }
+
+    /**
+     * @param Intervention $intervention
+     *
+     * @return mixed
+     */
+    public function addIntervention(Intervention $intervention)
+    {
+        $this->interventions = $intervention;
+
+        return $this;
+    }
+
+    /**
+     * @param Intervention $intervention
+     *
+     * @return mixed
+     */
+    public function removeIntervention(Intervention $intervention)
+    {
+        $this->interventions->removeElement($intervention);
+
+        return $this;
     }
 }

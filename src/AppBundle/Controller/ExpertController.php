@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Fuel;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
