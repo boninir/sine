@@ -5,7 +5,7 @@ NETWORK = sineo_default
 COMPOSE = NETWORK=$(NETWORK) docker-compose
 
 .PHONY: start
-start: up wait_app install update-db
+start: up wait_app install install-db
 
 .PHONY: up
 up:
@@ -15,14 +15,20 @@ up:
 install:
 	@$(COMPOSE) exec --user www-data php sh -c "composer install"
 
+
 .PHONY: update
 update:
 	$(eval repo ?= )
 	@$(COMPOSE) exec --user www-data php sh -c "composer update $(repo)"
 
+.PHONY: install-db
+install-db:
+	@$(COMPOSE) exec --user www-data php sh -c "bin/console doctrine:schema:create"
+	@$(COMPOSE) exec --user www-data php sh -c "bin/console doctrine:fixtures:load --append"
+
 .PHONY: update-db
 update-db:
-	@$(COMPOSE) exec --user www-data php sh -c "bin/console d:s:u --force"
+	@$(COMPOSE) exec --user www-data php sh -c "bin/console doctrine:schema:update --force"
 
 .PHONY: exec
 exec:
