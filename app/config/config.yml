@@ -4,7 +4,7 @@ imports:
     - { resource: services.yml }
 
 parameters:
-    locale: en
+    locale: fr
 
 framework:
     #esi:             ~
@@ -64,12 +64,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-# User Configuration
-fos_user:
-    db_driver: orm
-    firewall_name: main
-    user_class: AppBundle\Entity\User
-    from_email:
-        address: "%mailer_user%"
-        sender_name: "%mailer_user%"
