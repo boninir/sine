@@ -1,0 +1,61 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block core %}
+
+<div class="container center-block" role="main">
+
+    <div class="row text-center">
+        <h3>Gestion des utilisateur</h3>
+    </div>
+
+    <div class="row center-block text-center">
+        <a href="{{ path('add-user') }}" class="btn btn-success">
+            Ajouter un utilisateur
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div class="row center-block">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Login</th>
+                    <th>Adresse mail</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.mail }}</td>
+                        <td class="text-right">
+                            <a href="#" class="btn btn-primary" role="button">Modifier</a>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#modal-{{ user.id }}" role="button">Supprimer</button>
+
+                            <div class="modal fade text-left" id="modal-{{ user.id }}" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title">Confirmation</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Êtes vous sûr de vouloir supprimer l'utilisateur "<b>{{ user.username }}</b>" ?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                                            <a href="{{ path('delete-user', {'id': user.id}) }}" class="btn btn-danger">Confirmer</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
