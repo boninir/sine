@@ -1,0 +1,26 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block core %}
+
+<div class="container center-block" role="main">
+
+    <div class="row text-center">
+        <h3>Connexion</h3>
+    </div>
+    <hr>
+
+    <div class="col-md-8 col-md-offset-2">
+        {% if error %}
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ error.messageKey|trans(error.messageData, 'security') }}</h3>
+                </div>
+            </div>
+        {% endif %}
+
+        {% form_theme form 'AppBundle:form:fields.html.twig' %}
+        {{ form(form) }}
+    </div>
+</div>
+
+{% endblock %}
