@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\Type\RegisterType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,7 @@ class SecurityController extends Controller
 {
     /**
      * @Route(path="/register", name="register")
+     * @Template
      */
     public function registerAction(Request $request)
     {
@@ -45,14 +47,12 @@ class SecurityController extends Controller
             return $this->redirect($this->generateUrl('login'));
         }
 
-        return $this->render(
-            'AppBundle:Security:register.html.twig',
-            array('form' => $form->createView())
-        );
+        return ['form' => $form->createView()];
     }
 
     /**
      * @Route(path="/login", name="login")
+     * @Template
      */
     public function loginAction(Request $request)
     {
@@ -64,13 +64,10 @@ class SecurityController extends Controller
 
         $form = $this->createForm(LoginType::class);
 
-        return $this->render(
-            'AppBundle:Security:login.html.twig',
-            array(
-                'title' => 'Connexion',
-                'form' => $form->createView(),
-                'error' => $authenticationUtils->getLastAuthenticationError(),
-            )
-        );
+        return [
+            'title' => 'Connexion',
+            'form' => $form->createView(),
+            'error' => $authenticationUtils->getLastAuthenticationError(),
+        ];
     }
 }

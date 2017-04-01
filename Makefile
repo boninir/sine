@@ -5,7 +5,7 @@ NETWORK = sineo_default
 COMPOSE = NETWORK=$(NETWORK) docker-compose
 
 .PHONY: start
-start: up wait_app install install-db ## Starts the application
+start: up wait_app install reload-db ## Starts the application
 
 .PHONY: up
 up: ## Launches containers

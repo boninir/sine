@@ -15,6 +15,7 @@ services:
             - mysql:mysql
         volumes:
             - ./:/var/www/html/
+            - ./docker-config/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
 
     nginx:
         image: nginx
@@ -26,4 +27,4 @@ services:
             - "8080:80"
         volumes:
             - ./:/var/www/html/
-            - ./nginx/sineo.conf:/etc/nginx/conf.d/default.conf
+            - ./docker-config/nginx.conf:/etc/nginx/conf.d/default.conf
