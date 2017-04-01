@@ -30,7 +30,7 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.mail }}</td>
                         <td class="text-right">
-                            <a href="#" class="btn btn-primary" role="button">Modifier</a>
+                            <a href="{{ path('update-user', {'id': user.id}) }}" class="btn btn-primary" role="button">Modifier</a>
                             <button class="btn btn-danger" data-toggle="modal" data-target="#modal-{{ user.id }}" role="button">Supprimer</button>
 
                             <div class="modal fade text-left" id="modal-{{ user.id }}" tabindex="-1" role="dialog">

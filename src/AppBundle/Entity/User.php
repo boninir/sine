@@ -46,6 +46,13 @@ class User implements UserInterface
     /**
      * @var string
      *
+     * @Assert\Length(max="4096")
+     */
+    private $oldPassword;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=64)
      */
     private $password;
@@ -108,6 +115,25 @@ class User implements UserInterface
     public function getPlainPassword()
     {
         return $this->plainPassword;
+    }
+
+    /**
+     * @param string $password
+     * @return User
+     */
+    public function setOldPassword($password)
+    {
+        $this->oldPassword = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOldPassword()
+    {
+        return $this->oldPassword;
     }
 
     /**

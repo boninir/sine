@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
 use AppBundle\Form\RegisterType;
+use AppBundle\Form\UpdateUserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -32,8 +33,7 @@ class AdminController extends Controller
     public function deleteUserAction($id)
     {
         $manager = $this->getDoctrine()->getManager();
-        $user = $manager->getRepository(User::class)
-            ->find($id);
+        $user = $manager->getRepository(User::class)->find($id);
 
         $manager->remove($user);
         $manager->flush();
@@ -72,6 +72,36 @@ class AdminController extends Controller
             );
 
             return $this->redirect($this->generateUrl('users'));
+        }
+
+        return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route("/update-user/{id}", name="update-user")
+     * @Template
+     */
+    public function updateUserAction($id, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $manager->getRepository(User::class)->find($id);
+        $form = $this->createForm(UpdateUserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            if ($user->getPlainPassword() !== null) {
+                $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
+
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                "Le compte a bien été créé."
+            );
         }
 
         return ['form' => $form->createView()];
