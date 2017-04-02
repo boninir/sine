@@ -7,19 +7,28 @@
     <div class="row text-center">
         <h3>Connexion</h3>
     </div>
-    <hr>
 
     <div class="col-md-8 col-md-offset-2">
-        {% if error %}
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ error.messageKey|trans(error.messageData, 'security') }}</h3>
+        <div class="row theme-showcase" role="main">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="alert alert-success alert-dismissible flash-notice" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ flash_message }}
                 </div>
-            </div>
-        {% endif %}
+            {% endfor %}
+
+            {% if error %}
+                <div class="alert alert-warning alert-dismissible flash-notice" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+        </div>
 
         {% form_theme form 'AppBundle:form:fields.html.twig' %}
         {{ form(form) }}
+
+        <a href="{{ path('register') }}" class="btn btn-primary btn-block">S'inscrire</a>
     </div>
 </div>
 

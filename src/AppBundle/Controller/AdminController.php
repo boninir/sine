@@ -38,10 +38,7 @@ class AdminController extends Controller
         $manager->remove($user);
         $manager->flush();
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            "Le compte a bien été supprimé."
-        );
+        $this->get('session')->getFlashBag()->add('warning', 'Le compte a bien été supprimé.');
 
         return $this->redirectToRoute('users');
     }
@@ -66,10 +63,7 @@ class AdminController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                "Le compte a bien été créé."
-            );
+            $this->get('session')->getFlashBag()->add('notice', 'Le compte a bien été créé.');
 
             return $this->redirect($this->generateUrl('users'));
         }
@@ -95,13 +89,9 @@ class AdminController extends Controller
                 $user->setPassword($password);
             }
 
-            $manager->persist($user);
             $manager->flush();
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                "Le compte a bien été créé."
-            );
+            $this->get('session')->getFlashBag()->add('notice', 'Le compte a bien été mis à jour.');
         }
 
         return ['form' => $form->createView()];

@@ -1,4 +1,10 @@
 services:
+    form.register:
+        class: AppBundle\Form\RegisterType
+        arguments: [ '@security.authorization_checker' ]
+        tags:
+            - { name: form.type }
+
     form.admin.update_user:
         class: AppBundle\Form\UpdateUserType
         arguments: [ '@security.password_encoder' ]

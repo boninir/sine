@@ -9,9 +9,20 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class RegisterType extends AbstractType
 {
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $checker;
+
+    public function __construct(AuthorizationCheckerInterface $checker)
+    {
+        $this->checker = $checker;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,7 +33,10 @@ class RegisterType extends AbstractType
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
             ])
             ->add('mail', TextType::class, ['label' => 'Adresse email'])
-            ->add('roles', ChoiceType::class, [
+        ;
+
+        if ($this->checker->isGranted('ROLE_ADMIN')) {
+            $builder->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Utilisateur' => 'ROLE_USER',
                     'Expert' => 'ROLE_EXPERT',
@@ -36,10 +50,12 @@ class RegisterType extends AbstractType
                 'expanded' => true,
                 'label' => 'Rôle(s)',
                 'multiple' => true,
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Confirmer',
-            ])
-        ;
+            ]);
+        }
+
+        $builder->add('submit', SubmitType::class, [
+            'label' => 'Confirmer',
+            'attr' => ['class' => 'btn btn-success btn-block']
+        ]);
     }
 }
