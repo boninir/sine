@@ -4,9 +4,10 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\TypeIntervention;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadTypeInterventionData extends AbstractFixture
+class LoadTypeInterventionData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -27,5 +28,10 @@ class LoadTypeInterventionData extends AbstractFixture
         $manager->persist($cleaning);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }
