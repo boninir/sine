@@ -4,9 +4,10 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Fuel;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadFuelData extends AbstractFixture
+class LoadFuelData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -22,6 +23,15 @@ class LoadFuelData extends AbstractFixture
         $electricity->setDenomination('Électricité');
         $manager->persist($electricity);
 
+        $hybride = new Fuel();
+        $hybride->setDenomination('Hybride');
+        $manager->persist($hybride);
+
         $manager->flush();
     }
+    public function getOrder()
+    {
+        return 2;
+    }
+
 }
