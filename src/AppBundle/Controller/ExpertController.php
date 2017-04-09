@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Vehicle;
+use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -77,6 +78,34 @@ class ExpertController extends Controller
             ->findBy(array('required' => 1));
 
         $formIntervention = $this->createForm(ExpertiseType::class, $interventions);
+        $em = $this->getDoctrine()->getManager();
+
+        $formIntervention->handleRequest($request);
+
+        if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
+
+            $interventionsToSave = $formIntervention->getData();
+                var_dump($interventionsToSave);die();
+            foreach ($interventionsToSave as $interventionToSave) {
+                $vehicleIntervention = new VehicleIntervention();
+
+                $vehicleIntervention
+                    ->addVehicle($vehicle)
+                    ->addIntervention($interventionToSave)
+                    ->setState('à lancer');
+
+
+                $em->persist($vehicleIntervention);
+                $em->flush();
+            }
+
+            $this->addFlash(
+                'notice',
+                'L\'expertise à bien été enregistrée.'
+            );
+
+            return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
+        }
 
         $form->handleRequest($request);
 
@@ -84,7 +113,6 @@ class ExpertController extends Controller
 
             $vehicle = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
             $em->persist($vehicle);
             $em->flush();
 

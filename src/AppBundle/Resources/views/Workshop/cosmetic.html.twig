@@ -1,0 +1,30 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block core %}
+
+    <div class="container theme-showcase" role="main">
+        {% for flash_message in app.session.flashBag.get('notice') %}
+            <div class="alert alert-success alert-dismissible flash-notice" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="container">
+
+        <div class="row center-block text-center">
+            <h3>Liste des véhicules pouvant être traités</h3>
+        </div>
+
+        <div class="row">
+            {% if vehicleInterventions is empty %}
+                <div class="alert alert-warning text-center" role="alert">Aucun véhicule n'est actuellement disponible.</div>
+            {% else %}
+                {% for vehicleIntervention in vehicleInterventions %}
+
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

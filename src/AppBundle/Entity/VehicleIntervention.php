@@ -62,6 +62,11 @@ class VehicleIntervention
     private $intervention;
 
 
+    public function __construct()
+    {
+        $this->startnDate = new \Datetime();
+    }
+
     /**
      * Get id
      *
@@ -181,7 +186,7 @@ class VehicleIntervention
      *
      * @return mixed
      */
-    public function setVehicle($vehicle)
+    public function addVehicle($vehicle)
     {
         $this->vehicle = $vehicle;
 
@@ -201,7 +206,7 @@ class VehicleIntervention
      *
      * @return mixed
      */
-    public function setIntervention($intervention)
+    public function addIntervention($intervention)
     {
         $this->intervention = $intervention;
 
