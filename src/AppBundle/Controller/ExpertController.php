@@ -2,8 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Fuel;
+use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Vehicle;
+use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -75,6 +76,8 @@ class ExpertController extends Controller
             ->getRepository('AppBundle:Intervention')
             ->findBy(array('required' => 1));
 
+        $formIntervention = $this->createForm(ExpertiseType::class, $interventions);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -97,6 +100,7 @@ class ExpertController extends Controller
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
+            'formIntervention' => $formIntervention->createView(),
         ));
     }
 }

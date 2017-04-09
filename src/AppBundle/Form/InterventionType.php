@@ -16,17 +16,7 @@ class InterventionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('denomination')
-            ->add('creationDate')
-            ->add('required')
-            ->add('typeIntervention')
-            ->add('id', EntityType::class, array(
-                'required' => false,
-                'class' => Intervention::class,
-                'expanded' => true,
-                'multiple' => true
-                )
-            )
+            ->add('id')
         ;
     }
     
