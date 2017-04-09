@@ -16,6 +16,8 @@ class ExpertiseType extends AbstractType
 
         $builder->add('interventions', CollectionType::class, array(
             'entry_type'   => InterventionType::class,
+            'allow_add'    => true,
+            'allow_delete' => true
         ));
     }
 

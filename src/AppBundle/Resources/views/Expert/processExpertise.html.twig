@@ -52,20 +52,331 @@
 
         <div class="row">
             <div class="tab-content text-center">
-                <div role="tabpanel" class="tab-pane active" id="mecanique">
-                    {{ form_start(formIntervention) }}
+                    <div role="tabpanel" class="tab-pane active" id="mecanique">
+                {{ form_start(formIntervention) }}
                         {% for interv in formIntervention.vars.data %}
+                            <br>
                             <div class="col-md-5 text-right">
-                                <p><b>truc</b></p>
+                                <p><b>{{ interv.denomination }}</b></p>
                             </div>
                             <div class="col-md-7">
-                                <input type="checkbox" value="{{ interv.id }}" data-toggle="toggle" data-on="Oui" data-off="Non" data-onstyle="success" data-offstyle="danger">
+                                <input type="checkbox" name="checkbox" value="{{ interv.id }}" data-toggle="toggle" data-on="Oui" data-off="Non" data-onstyle="success" data-offstyle="danger">
                             </div>
                         {% endfor %}
-                    {{ form_end(formIntervention) }}
-                </div>
-                <div role="tabpanel" class="tab-pane" id="carosserie">2</div>
-                <div role="tabpanel" class="tab-pane" id="interrieur">3</div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="carosserie">
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>PC AV</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord gauche
+                                <input type= "radio" name="tarif" value="jour"> raccord droit
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture pc
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>PC AR</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord gauche
+                                <input type= "radio" name="tarif" value="jour"> raccord droit
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture pc
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Capôt</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Aile AV gauche</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Aile AV droite</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Porte AV gauche</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Porte AV droite</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Aile AR gauche</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Aile AR droite</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Porte AR gauche</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Porte AR droite</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Coffre</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Toit</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> raccord
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Bas de caisse gauche</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Bas de caisse droit</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> tôlerie
+                                <input type= "radio" name="tarif" value="jour"> peinture
+                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
+                                <input type= "radio" name="tarif" value="jour"> changer + peinture
+                                <input type= "radio" name="tarif" value="jour"> non
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Optique AV</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> gauche OK
+                                <input type= "radio" name="tarif" value="jour"> gauche à changer
+                                <input type= "radio" name="tarif" value="jour"> droit OK
+                                <input type= "radio" name="tarif" value="jour"> droit à changer
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Optique AR</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> gauche OK
+                                <input type= "radio" name="tarif" value="jour"> gauche à changer
+                                <input type= "radio" name="tarif" value="jour"> droit OK
+                                <input type= "radio" name="tarif" value="jour"> droit à changer
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Bas de caisse droit</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "radio" name="tarif" value="jour"> OK
+                                <input type= "radio" name="tarif" value="jour"> réparation impact
+                                <input type= "radio" name="tarif" value="jour"> à changer
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Réparation jante alu</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "checkbox" name="tarif" value="jour"> AV droite
+                                <input type= "checkbox" name="tarif" value="jour"> AV gauche
+                                <input type= "checkbox" name="tarif" value="jour"> AR droit
+                                <input type= "checkbox" name="tarif" value="jour"> AR gauche
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="interrieur">
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Réparation tableau de bord</b></p>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="checkbox" name="checkbox" value="" data-toggle="toggle" data-on="Oui" data-off="Non" data-onstyle="success" data-offstyle="danger">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Réparation interrieur de porte</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "checkbox" name="tarif" value="jour"> AV conducteur
+                                <input type= "checkbox" name="tarif" value="jour"> AV passager
+                                <input type= "checkbox" name="tarif" value="jour"> AR droit
+                                <input type= "checkbox" name="tarif" value="jour"> AR gauche
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Réparation sellerie</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "checkbox" name="tarif" value="jour"> Assise AV conducteur
+                                <input type= "checkbox" name="tarif" value="jour"> Dossier AV conducteur
+                                <input type= "checkbox" name="tarif" value="jour"> Assise AV passager
+                                <input type= "checkbox" name="tarif" value="jour"> Dossier AV passager
+                                <input type= "checkbox" name="tarif" value="jour"> Dossier banquette AR
+                                <input type= "checkbox" name="tarif" value="jour"> Dossier banquette AR
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 text-right">
+                                <p><b>Moquette de sol</b></p>
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <input type= "checkbox" name="tarif" value="jour"> AV conducteur
+                                <input type= "checkbox" name="tarif" value="jour"> AV passager
+                                <input type= "checkbox" name="tarif" value="jour"> AR
+                                <input type= "checkbox" name="tarif" value="jour"> coffre
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br>
+                    <input type="submit" value="Enregistrer l'expertise" class="btn btn-success" />
+                {{ form_end(formIntervention) }}
             </div>
         </div>
     </div>
@@ -104,6 +415,74 @@
 
         $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').focus()
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+            var $container = $('div#appbundle_expertise_interventions');
+
+            // On ajoute un lien pour ajouter une nouvelle catégorie
+            var $addLink = $('<a href="#" id="add_intervention" class="btn btn-warning">' +
+                    'Ajouter une intervention ' +
+                    '<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>' +
+                    '</a>');
+            $container.append($addLink);
+
+            // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+            $addLink.click(function(e) {
+                addCategory($container);
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+            // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+            var index = $container.find(':input').length;
+
+            // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+            if (index == 0) {
+                addCategory($container);
+            } else {
+                // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
+                $container.children('div').each(function() {
+                    addDeleteLink($(this));
+                });
+            }
+
+            // La fonction qui ajoute un formulaire Categorie
+            function addCategory($container) {
+                // Dans le contenu de l'attribut « data-prototype », on remplace :
+                // - le texte "__name__label__" qu'il contient par le label du champ
+                // - le texte "__name__" qu'il contient par le numéro du champ
+                var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Intervention supplémnentaire n°' + (index+1))
+                        .replace(/__name__/g, index));
+
+                // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+                addDeleteLink($prototype);
+
+                // On ajoute le prototype modifié à la fin de la balise <div>
+                $container.append($prototype);
+
+                // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+                index++;
+            }
+
+            // La fonction qui ajoute un lien de suppression d'une catégorie
+            function addDeleteLink($prototype) {
+                // Création du lien
+                $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+                // Ajout du lien
+                $prototype.append($deleteLink);
+
+                // Ajout du listener sur le clic du lien
+                $deleteLink.click(function(e) {
+                    $prototype.remove();
+                    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                    return false;
+                });
+            }
         });
     </script>
 {% endblock %}
