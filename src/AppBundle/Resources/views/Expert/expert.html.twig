@@ -37,26 +37,27 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-7">- Marque : {{ vehicle.mark }}</div>
-                                <div class="col-md-5">- Immatriculation : {{ vehicle.registration }}</div>
+                                <div class="col-md-5">- Modèle : {{ vehicle.model }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- Type : {{ vehicle.type }}</div>
-                                <div class="col-md-5">- CV : {{ vehicle.cv }}</div>
+                                <div class="col-md-7">- Immatriculation : {{ vehicle.registration }}</div>
+                                <div class="col-md-5">- Type : {{ vehicle.type }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- N° châssis : {{ vehicle.frame }}</div>
-                                <div class="col-md-5">- Couleur : {{ vehicle.color }}</div>
+                                <div class="col-md-7">- CV : {{ vehicle.cv }}</div>
+                                <div class="col-md-5">- N° châssis : {{ vehicle.frame }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- Kilomètres parcouru : {{ vehicle.kilometerTraveled }}</div>
-                                <div class="col-md-5">- Kilomètres au compteur : {{ vehicle.kilometerOnCounter }}</div>
+                                <div class="col-md-7">- Couleur : {{ vehicle.color }}</div>
+                                <div class="col-md-5">- Kilomètres parcouru : {{ vehicle.kilometerTraveled }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- Mise en service : {{ vehicle.releaseDate|date('d/m/Y') }}</div>
-                                <div class="col-md-5">- Bon SAP : {{ vehicle.sapVoucher }}</div>
+                                <div class="col-md-7">- Kilomètres au compteur : {{ vehicle.kilometerOnCounter }}</div>
+                                <div class="col-md-5">- Mise en service : {{ vehicle.releaseDate|date('d/m/Y') }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- Essence : {{ vehicle.fuel.denomination }}</div>
+                                <div class="col-md-7">- Bon SAP : {{ vehicle.sapVoucher }}</div>
+                                <div class="col-md-5">- Essence : {{ vehicle.fuel.denomination }}</div>
                             </div>
                             <div class="row">
                                 <div class="col-md-7"></div>

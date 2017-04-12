@@ -84,20 +84,26 @@ class ExpertController extends Controller
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
 
-            $interventionsToSave = $formIntervention->get('interventions')->getData();
+            $interventionsToSave = $formIntervention->get('interventions');
             foreach ($interventionsToSave as $interventionToSave) {
+                if (!$interventionToSave['select']->getData()) {
+                    continue;
+                }
+
                 $vehicleIntervention = new VehicleIntervention();
 
                 $vehicleIntervention
                     ->addVehicle($vehicle)
-                    ->addIntervention($interventionToSave)
-                    ->setState('à lancer');
+                    ->addIntervention($interventionToSave->getData())
+                    ->setState('à lancer')
+                    ->setComment($interventionToSave['comment']->getData())
+                ;
 
 
                 $em->persist($vehicleIntervention);
-                $em->flush();
             }
 
+            $em->flush();
             $this->addFlash(
                 'notice',
                 'L\'expertise à bien été enregistrée.'

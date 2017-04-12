@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Intervention;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,6 +33,11 @@ class InterventionType extends AbstractType
                         "data-offstyle" => "danger",
                     ];
                 }
+            ])
+            ->add('comment', TextareaType::class, [
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
             ])
         ;
     }
