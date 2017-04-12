@@ -77,15 +77,14 @@ class ExpertController extends Controller
             ->getRepository('AppBundle:Intervention')
             ->findBy(array('required' => 1));
 
-        $formIntervention = $this->createForm(ExpertiseType::class, $interventions);
+        $formIntervention = $this->createForm(ExpertiseType::class, ['interventions' => $interventions]);
         $em = $this->getDoctrine()->getManager();
 
         $formIntervention->handleRequest($request);
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
 
-            $interventionsToSave = $formIntervention->getData();
-                var_dump($interventionsToSave);die();
+            $interventionsToSave = $formIntervention->get('interventions')->getData();
             foreach ($interventionsToSave as $interventionToSave) {
                 $vehicleIntervention = new VehicleIntervention();
 

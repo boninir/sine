@@ -7,6 +7,7 @@
     <div class="row text-center">
         <h3>Connexion</h3>
     </div>
+    <hr>
 
     <div class="col-md-8 col-md-offset-2">
         <div class="row theme-showcase" role="main">
@@ -26,9 +27,14 @@
         </div>
 
         {% form_theme form 'AppBundle:form:fields.html.twig' %}
-        {{ form(form) }}
 
-        <a href="{{ path('register') }}" class="btn btn-primary btn-block">S'inscrire</a>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="pull-right">
+            <input type="submit" value="Se connecter" class="btn btn-success" />
+            <a href="{{ path('register') }}" class="btn btn-primary">S'inscrire</a>
+        </div>
+        {{ form_end(form) }}
     </div>
 </div>
 

@@ -54,10 +54,6 @@ class UpdateUserType extends AbstractType
                 'multiple' => true,
                 'required' => false,
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Confirmer',
-                'attr' => array('class' => 'btn btn-success btn-block'),
-            ])
             ->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
                 $form = $event->getForm();
                 $user = $event->getData();

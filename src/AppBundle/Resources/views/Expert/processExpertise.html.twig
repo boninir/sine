@@ -33,7 +33,7 @@
                 <div class="col-md-5"><b>- Kilomètres au compteur :</b> {{ vehicle.kilometerOnCounter }}</div>
             </div>
             <div class="row">
-                <div class="col-md-7"><b>- Mise en service :</b> {{ vehicle.releaseDate }}</div>
+                <div class="col-md-7"><b>- Mise en service :</b> {{ vehicle.releaseDate|date('d/m/Y') }}</div>
                 <div class="col-md-5"><b>- Bon SAP :</b> {{ vehicle.sapVoucher }}</div>
             </div>
             <div class="row">
@@ -55,16 +55,18 @@
         <div class="row">
             <div class="tab-content text-center">
                     <div role="tabpanel" class="tab-pane active" id="mecanique">
-                {{ form_start(formIntervention) }}
-                        {% for interv in formIntervention.vars.data %}
+                    {{ form_start(formIntervention) }}
+                        {% for interv in formIntervention.interventions %}
                             <br>
                             <div class="col-md-5 text-right">
-                                <p><b>{{ interv.denomination }}</b></p>
+                                <p><b>{{ interv.vars.data.denomination }}</b></p>
                             </div>
                             <div class="col-md-7">
-                                <input type="checkbox" name="checkbox" value="{{ interv.id }}" data-toggle="toggle" data-on="Oui" data-off="Non" data-onstyle="success" data-offstyle="danger">
+                                {{ form_row(interv.select) }}
                             </div>
                         {% endfor %}
+
+                        {{ form_widget(formIntervention) }}
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="carosserie">
@@ -465,7 +467,7 @@
                 // Dans le contenu de l'attribut « data-prototype », on remplace :
                 // - le texte "__name__label__" qu'il contient par le label du champ
                 // - le texte "__name__" qu'il contient par le numéro du champ
-                var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Intervention supplémnentaire n°' + (index+1))
+                var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Intervention supplémentaire n°' + (index+1))
                         .replace(/__name__/g, index));
 
                 // On ajoute au prototype un lien pour pouvoir supprimer la catégorie

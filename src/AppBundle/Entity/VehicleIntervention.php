@@ -24,7 +24,7 @@ class VehicleIntervention
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=50, unique=true)
+     * @ORM\Column(name="state", type="string", length=50)
      */
     private $state;
 

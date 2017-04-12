@@ -11,9 +11,14 @@
 
     <div class="col-md-8 col-md-offset-2">
         {% form_theme form 'AppBundle:form:fields.html.twig' %}
-        {{ form(form) }}
 
-        <a href="{{ path('login') }}" class="btn btn-primary btn-block" role="button">Retour</a>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <div class="pull-right">
+            <input type="submit" value="S'inscrire" class="btn btn-success" />
+            <a href="{{ path('login') }}" class="btn btn-primary">Se connecter</a>
+        </div>
+        {{ form_end(form) }}
     </div>
 </div>
 

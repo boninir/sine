@@ -20,7 +20,7 @@ class LoadFuelData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($diesel);
 
         $electricity = new Fuel();
-        $electricity->setDenomination('Électricité');
+        $electricity->setDenomination('Électrique');
         $manager->persist($electricity);
 
         $hybride = new Fuel();

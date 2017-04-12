@@ -52,10 +52,5 @@ class RegisterType extends AbstractType
                 'multiple' => true,
             ]);
         }
-
-        $builder->add('submit', SubmitType::class, [
-            'label' => 'Confirmer',
-            'attr' => ['class' => 'btn btn-success btn-block']
-        ]);
     }
 }

@@ -1,8 +1,9 @@
 SHELL = /bin/bash
 .DEFAULT_GOAL := help
 
-NETWORK = sineo_default
-COMPOSE = NETWORK=$(NETWORK) docker-compose
+PROJECT = sineo
+NETWORK = $(PROJECT)_default
+COMPOSE = NETWORK=$(NETWORK) docker-compose -p $(PROJECT)
 
 .PHONY: start
 start: up wait_app install reload-db ## Starts the application

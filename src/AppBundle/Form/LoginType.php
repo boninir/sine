@@ -21,10 +21,6 @@ class LoginType extends AbstractType
                 'data' => true,
                 'required' => false,
             ))
-            ->add('submit', SubmitType::class, array(
-                'label' => 'Confirmer',
-                'attr' => array('class' => 'btn btn-success btn-block')
-            ))
         ;
     }
 }

@@ -39,6 +39,13 @@ class Vehicle
     /**
      * @var string
      *
+     * @ORM\Column(name="model", type="string", length=50)
+     */
+    private $model;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="type", type="string", length=50)
      */
     private $type;
@@ -174,6 +181,30 @@ class Vehicle
     public function getMark()
     {
         return $this->mark;
+    }
+
+    /**
+     * Set model
+     *
+     * @param string $model
+     *
+     * @return Vehicle
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    /**
+     * Get model
+     *
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
     }
 
     /**
@@ -410,6 +441,14 @@ class Vehicle
     public function getInterventions()
     {
         return $this->interventions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setInterventions($interventions)
+    {
+        $this->interventions = $interventions;
     }
 
     /**

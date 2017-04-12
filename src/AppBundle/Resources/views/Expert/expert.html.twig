@@ -52,7 +52,7 @@
                                 <div class="col-md-5">- Kilomètres au compteur : {{ vehicle.kilometerOnCounter }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7">- Mise en service : {{ vehicle.releaseDate }}</div>
+                                <div class="col-md-7">- Mise en service : {{ vehicle.releaseDate|date('d/m/Y') }}</div>
                                 <div class="col-md-5">- Bon SAP : {{ vehicle.sapVoucher }}</div>
                             </div>
                             <div class="row">
