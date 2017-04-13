@@ -38,9 +38,31 @@ class VehicleIntervention
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     private $startDate;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="answers", type="array", nullable=true)
+     */
+    private $answers;
 
     /**
      * @var \DateTime
@@ -48,6 +70,13 @@ class VehicleIntervention
      * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
     private $endDate;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="time", type="integer", nullable=true)
+     */
+    private $time;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehicle", inversedBy="interventions")
@@ -64,7 +93,7 @@ class VehicleIntervention
 
     public function __construct()
     {
-        $this->startnDate = new \Datetime();
+        $this->createdAt = new \Datetime();
     }
 
     /**
@@ -171,6 +200,86 @@ class VehicleIntervention
     public function getEndDate()
     {
         return $this->endDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     *
+     * @return VehicleIntervention
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return VehicleIntervention
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @param mixed $answers
+     *
+     * @return VehicleIntervention
+     */
+    public function setAnswers($answers)
+    {
+        $this->answers = $answers;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param mixed $time
+     *
+     * @return VehicleIntervention
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+
+        return $this;
     }
 
     /**
