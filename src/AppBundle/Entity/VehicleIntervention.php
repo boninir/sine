@@ -46,7 +46,11 @@ class VehicleIntervention
     /**
      * @var \DateTime
      *
+<<<<<<< HEAD
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+=======
+     * @ORM\Column(name="updated_at", type="datetime")
+>>>>>>> ccb4ee38ccde00308d0732ca0aa704b9ac930987
      */
     private $updatedAt;
 
