@@ -28,6 +28,11 @@ class LoadTypeInterventionData extends AbstractFixture implements OrderedFixture
         $manager->persist($cleaning);
 
         $manager->flush();
+
+        $this->addReference('mechanical', $mechanical);
+        $this->addReference('body', $body);
+        $this->addReference('cosmetic', $cosmetic);
+        $this->addReference('cleaning', $cleaning);
     }
 
     public function getOrder()
