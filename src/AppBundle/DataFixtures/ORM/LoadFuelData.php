@@ -19,16 +19,22 @@ class LoadFuelData extends AbstractFixture implements OrderedFixtureInterface
         $diesel->setDenomination('Diesel');
         $manager->persist($diesel);
 
-        $electricity = new Fuel();
-        $electricity->setDenomination('Électrique');
-        $manager->persist($electricity);
+        $electric = new Fuel();
+        $electric->setDenomination('Électrique');
+        $manager->persist($electric);
 
-        $hybride = new Fuel();
-        $hybride->setDenomination('Hybride');
-        $manager->persist($hybride);
+        $hybrid = new Fuel();
+        $hybrid->setDenomination('Hybride');
+        $manager->persist($hybrid);
 
         $manager->flush();
+
+        $this->addReference('gasoline', $gasoline);
+        $this->addReference('diesel', $diesel);
+        $this->addReference('electric', $electric);
+        $this->addReference('hybrid', $hybrid);
     }
+
     public function getOrder()
     {
         return 2;

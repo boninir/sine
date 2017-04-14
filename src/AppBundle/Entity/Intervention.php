@@ -48,6 +48,13 @@ class Intervention
      */
     private $required;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="answers", type="array", nullable=true)
+     */
+    private $answers;
+
 
     public function __construct()
     {
@@ -122,6 +129,8 @@ class Intervention
     public function setCreationDate($creationDate)
     {
         $this->creationDate = $creationDate;
+
+        return $this;
     }
 
     /**
@@ -138,6 +147,28 @@ class Intervention
     public function setRequired($required)
     {
         $this->required = $required;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+
+    /**
+     * @param mixed $answers
+     *
+     * @return VehicleIntervention
+     */
+    public function setAnswers($answers)
+    {
+        $this->answers = $answers;
+
+        return $this;
     }
 }
 

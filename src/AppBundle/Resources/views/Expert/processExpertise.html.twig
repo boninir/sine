@@ -55,10 +55,10 @@
 
         <div class="row">
             <div class="tab-content text-center">
-                    <div role="tabpanel" class="tab-pane active" id="mecanique">
+                <div role="tabpanel" class="tab-pane active" id="mecanique">
                     {{ form_start(formIntervention) }}
-                        {% for interv in formIntervention.interventions %}
-                            <div class="row">
+                        {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Mécanique' %}
+                            <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
                                 <br>
                                 <div class="col-md-3"></div>
                                 <div class="col-md-2 text-right">
@@ -69,12 +69,12 @@
                                 </div>
 
                                 <div class="col-md-2">
-                                    <a class="btn btn-warning" data-toggle="modal" data-target="#modal-{{ interv.vars.data.id }}">
-                                        Ajouter un commentaire
+                                    <a class="btn btn-warning set-comment" data-toggle="modal" data-target="#modal-{{ interv.vars.data.id }}" disabled="disabled">
+                                        <span class="content">Ajouter un commentaire</span>
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </a>
 
-                                    <div class="modal fade text-left" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -93,268 +93,57 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3"></div>
+                                <div class="col-md-3 text-left">
+                                    <div class="comment"></div>
+                                </div>
                             </div>
                         {% endfor %}
-
-                        {{ form_widget(formIntervention) }}
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="carosserie">
-                        <br>
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>PC AV</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord gauche
-                                <input type= "radio" name="tarif" value="jour"> raccord droit
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture pc
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
+                        {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Carrosserie' %}
+                            <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
+                                <br>
+                                <div class="col-md-1 text-right">
+                                    <p><b>{{ interv.vars.data.denomination }}</b></p>
+                                </div>
+                                <div class="col-md-7">
+                                    {# {{ form_row(interv.select) }} #}
+                                    {% for select in interv.select %}
+                                        {{ form_widget(select) }} {{ form_label(select) }}
+                                    {% endfor %}
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>PC AR</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord gauche
-                                <input type= "radio" name="tarif" value="jour"> raccord droit
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture pc
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
+                                <div class="col-md-1">
+                                    <a class="btn btn-warning set-comment" data-toggle="modal" data-target="#modal-{{ interv.vars.data.id }}" disabled="disabled">
+                                        <span class="content">Ajouter un commentaire</span>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </a>
 
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Capôt</b></p>
+                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">Commentaire</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {% form_theme interv.comment 'AppBundle:form:fields.html.twig' %}
+                                                    {{ form_row(interv.comment) }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Retour</button>
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-left">
+                                    <div class="comment"></div>
+                                </div>
                             </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Aile AV gauche</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Aile AV droite</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Porte AV gauche</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Porte AV droite</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Aile AR gauche</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Aile AR droite</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Porte AR gauche</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Porte AR droite</b></p>
-                            </div>
-                            <div class="col-md-10">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Coffre</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Toit</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> raccord
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Bas de caisse gauche</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Bas de caisse droit</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> tôlerie
-                                <input type= "radio" name="tarif" value="jour"> peinture
-                                <input type= "radio" name="tarif" value="jour"> redressage + peinture
-                                <input type= "radio" name="tarif" value="jour"> changer + peinture
-                                <input type= "radio" name="tarif" value="jour"> non
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Optique AV</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> gauche OK
-                                <input type= "radio" name="tarif" value="jour"> gauche à changer
-                                <input type= "radio" name="tarif" value="jour"> droit OK
-                                <input type= "radio" name="tarif" value="jour"> droit à changer
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Optique AR</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> gauche OK
-                                <input type= "radio" name="tarif" value="jour"> gauche à changer
-                                <input type= "radio" name="tarif" value="jour"> droit OK
-                                <input type= "radio" name="tarif" value="jour"> droit à changer
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Bas de caisse droit</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "radio" name="tarif" value="jour"> OK
-                                <input type= "radio" name="tarif" value="jour"> réparation impact
-                                <input type= "radio" name="tarif" value="jour"> à changer
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-2 text-right">
-                                <p><b>Réparation jante alu</b></p>
-                            </div>
-                            <div class="col-md-10 text-center">
-                                <input type= "checkbox" name="tarif" value="jour"> AV droite
-                                <input type= "checkbox" name="tarif" value="jour"> AV gauche
-                                <input type= "checkbox" name="tarif" value="jour"> AR droit
-                                <input type= "checkbox" name="tarif" value="jour"> AR gauche
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="interrieur">
@@ -419,6 +208,8 @@
 
                     <br>
                     <input type="submit" value="Enregistrer l'expertise" class="btn btn-success" />
+
+                    {{ form_widget(formIntervention) }}
                 {{ form_end(formIntervention) }}
             </div>
         </div>
@@ -525,6 +316,37 @@
                     e.preventDefault(); // évite qu'un # apparaisse dans l'URL
                     return false;
                 });
+            }
+        });
+    </script>
+
+
+    <script type="text/javascript">
+        $('.choose-intervention').change(function(e) {
+            var row = $(this).closest('.row'),
+                comment = $(row).find('textarea').val()
+            ;
+
+            if ($(this).is(':checked')) {
+                $(row).find('.comment').html(comment);
+                $(row).find('.set-comment').attr('disabled', false);
+            } else {
+                $(row).find('.comment').html('');
+                $(row).find('.set-comment').attr('disabled', true);
+            }
+        });
+
+        $('.comment-modal button').click(function() {
+            var row = $(this).closest('.row'),
+                comment = $(row).find('textarea').val()
+            ;
+
+            $(row).find('.comment').html(comment);
+
+            if (comment != '') {
+                $(row).find('.set-comment .content').html('Modifier le commentaire');
+            } else {
+                $(row).find('.set-comment .content').html('Ajouter un commentaire');
             }
         });
     </script>
