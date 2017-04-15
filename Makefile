@@ -16,7 +16,6 @@ up: ## Launches containers
 install: ## Launches composer install
 	@$(COMPOSE) exec --user www-data php sh -c "composer install"
 
-
 .PHONY: update
 update: ## Launches composer update. repo=xxx to update a specific repo
 	$(eval repo ?= )

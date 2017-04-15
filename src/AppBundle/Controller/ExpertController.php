@@ -97,6 +97,7 @@ class ExpertController extends Controller
                     ->addIntervention($interventionToSave->getData())
                     ->setState('à lancer')
                     ->setComment($interventionToSave['comment']->getData())
+                    ->setAnswers($interventionToSave['select']->getData())
                 ;
 
 
