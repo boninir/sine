@@ -19,9 +19,9 @@ class LoadTypeInterventionData extends AbstractFixture implements OrderedFixture
         $body->setDenomination('Carrosserie');
         $manager->persist($body);
 
-        $cosmetic = new TypeIntervention();
-        $cosmetic->setDenomination('Cosmétique');
-        $manager->persist($cosmetic);
+        $inside = new TypeIntervention();
+        $inside->setDenomination('Intérieur');
+        $manager->persist($inside);
 
         $cleaning = new TypeIntervention();
         $cleaning->setDenomination('Nettoyage');
@@ -31,7 +31,7 @@ class LoadTypeInterventionData extends AbstractFixture implements OrderedFixture
 
         $this->addReference('mechanical', $mechanical);
         $this->addReference('body', $body);
-        $this->addReference('cosmetic', $cosmetic);
+        $this->addReference('inside', $inside);
         $this->addReference('cleaning', $cleaning);
     }
 
