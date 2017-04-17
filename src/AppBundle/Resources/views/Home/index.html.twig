@@ -5,8 +5,217 @@
     <div class="container theme-showcase" role="main">
         <div class="jumbotron">
             <img src="{{ asset('img/sineo.png') }}" class="center-block" alt="Sineo" width="100"/>
-            <p>Work In Progress... Formulaire de recherche à venir</p>
+            <div class="row">
+                {{ form_start(form) }}
+                {% form_theme form 'AppBundle:form:fields.html.twig' %}
+                {{ form_widget(form) }}
+                <div class="pull-right">
+                    <input type="submit" value="Rechercher" class="btn btn-success" />
+                </div>
+                {{ form_end(form) }}
+            </div>
         </div>
+
+        <div class="row">
+            {% for flash_message in app.session.flashBag.get('notice') %}
+                <div class="alert alert-danger alert-dismissible flash-notice" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+        </div>
+
+    {% if vehicle is not empty %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title text-center">{{ vehicle.mark  ~ ' ' ~ vehicle.model ~ ' (' ~ vehicle.registration ~ ')'}}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                        <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="text-center">
+                        <span class="col-md-1"></span>
+                        <h2><span class="col-md-10 label label-info">Mécanique</span></h2>
+                        <span class="col-md-1"></span>
+                    </div>
+                </div>
+                <br>
+
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Mécanique' %}
+
+                    {% set class = '' %}
+                    {% set icon = '' %}
+
+                    {% if intervention.state == 'à lancer' %}
+                        {% set class = 'has-error' %}
+                        {% set icon = 'remove' %}
+                    {% elseif intervention.state == 'en cours' %}
+                        {% set class = 'has-warning' %}
+                        {% set icon = 'repeat' %}
+                    {% else %}
+                        {% set class = 'has-success' %}
+                        {% set icon = 'ok' %}
+                    {% endif %}
+                        <div class="row {{ class }} has-feedback">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                            <div class="col-md-5">
+                                {{ intervention.state }}
+                                <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="text-center">
+                        <span class="col-md-1"></span>
+                        <h2><span class="col-md-10 label label-info">Carosserie</span></h2>
+                        <span class="col-md-1"></span>
+                    </div>
+                </div>
+                <br>
+
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Carrosserie' %}
+
+                    {% set class = '' %}
+                    {% set icon = '' %}
+
+                    {% if intervention.state == 'à lancer' %}
+                        {% set class = 'has-error' %}
+                        {% set icon = 'remove' %}
+                    {% elseif intervention.state == 'en cours' %}
+                        {% set class = 'has-warning' %}
+                        {% set icon = 'repeat' %}
+                    {% else %}
+                        {% set class = 'has-success' %}
+                        {% set icon = 'ok' %}
+                    {% endif %}
+
+                    <div class="row {{ class }} has-feedback">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                        <div class="col-md-5">
+                            {{ intervention.state }}
+                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="text-center">
+                        <span class="col-md-1"></span>
+                        <h2><span class="col-md-10 label label-info">Cosmétique</span></h2>
+                        <span class="col-md-1"></span>
+                    </div>
+                </div>
+                <br>
+
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Cosmétique' %}
+
+                    {% set class = '' %}
+                    {% set icon = '' %}
+
+                    {% if intervention.state == 'à lancer' %}
+                        {% set class = 'has-error' %}
+                        {% set icon = 'remove' %}
+                    {% elseif intervention.state == 'en cours' %}
+                        {% set class = 'has-warning' %}
+                        {% set icon = 'repeat' %}
+                    {% else %}
+                        {% set class = 'has-success' %}
+                        {% set icon = 'ok' %}
+                    {% endif %}
+
+                    <div class="row {{ class }} has-feedback">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                        <div class="col-md-5">
+                            {{ intervention.state }}
+                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="text-center">
+                        <span class="col-md-1"></span>
+                        <h2><span class="col-md-10 label label-info">Nettoyage</span></h2>
+                        <span class="col-md-1"></span>
+                    </div>
+                </div>
+                <br>
+
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Nettoyage' %}
+
+                    {% set class = '' %}
+                    {% set icon = '' %}
+
+                    {% if intervention.state == 'à lancer' %}
+                        {% set class = 'has-error' %}
+                        {% set icon = 'remove' %}
+                    {% elseif intervention.state == 'en cours' %}
+                        {% set class = 'has-warning' %}
+                        {% set icon = 'repeat' %}
+                    {% else %}
+                        {% set class = 'has-success' %}
+                        {% set icon = 'ok' %}
+                    {% endif %}
+
+                    <div class="row {{ class }} has-feedback">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                        <div class="col-md-5">
+                            {{ intervention.state }}
+                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="row">
+                    <div class="text-center">
+                        <span class="col-md-1"></span>
+                        <h2><span class="col-md-10 label label-info">Photos</span></h2>
+                        <span class="col-md-1"></span>
+                    </div>
+                </div>
+                <br>
+
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Photos' %}
+
+                    {% set class = '' %}
+                    {% set icon = '' %}
+
+                    {% if intervention.state == 'à lancer' %}
+                        {% set class = 'has-error' %}
+                        {% set icon = 'remove' %}
+                    {% elseif intervention.state == 'en cours' %}
+                        {% set class = 'has-warning' %}
+                        {% set icon = 'repeat' %}
+                    {% else %}
+                        {% set class = 'has-success' %}
+                        {% set icon = 'ok' %}
+                    {% endif %}
+
+                    <div class="row {{ class }} has-feedback">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                        <div class="col-md-5">
+                            {{ intervention.state }}
+                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+        </div>
+        {% endif %}
     </div>
+
 
 {% endblock %}
