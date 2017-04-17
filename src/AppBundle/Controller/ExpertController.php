@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Intervention;
+use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
@@ -77,7 +78,11 @@ class ExpertController extends Controller
             ->getRepository('AppBundle:Intervention')
             ->findBy(array('required' => 1));
 
-        $formIntervention = $this->createForm(ExpertiseType::class, ['interventions' => $interventions]);
+        $formIntervention = $this->createForm(
+            ExpertiseType::class,
+            ['interventions' => $interventions],
+            ['vehicle' => $vehicle]
+        );
         $em = $this->getDoctrine()->getManager();
 
         $formIntervention->handleRequest($request);
@@ -86,25 +91,52 @@ class ExpertController extends Controller
 
             $interventionsToSave = $formIntervention->get('interventions');
             foreach ($interventionsToSave as $interventionToSave) {
-                if (!$interventionToSave['select']->getData()) {
+                $vehicleIntervention = $em
+                    ->getRepository(VehicleIntervention::class)
+                    ->findOneBy([
+                        'vehicle' => $vehicle,
+                        'intervention' => $interventionToSave->getData()
+                    ]);
+
+                if (!$interventionToSave['select']->getData() && $vehicleIntervention !== null) {
+                    $em->remove($vehicleIntervention);
+                } elseif ($vehicleIntervention !== null) {
+                    $vehicleIntervention
+                        ->setComment($interventionToSave['comment']->getData())
+                        ->setAnswers($interventionToSave['select']->getData())
+                    ;
+                } elseif ($interventionToSave['select']->getData()) {
+                    $vehicleIntervention = (new VehicleIntervention())
+                        ->setVehicle($vehicle)
+                        ->addIntervention($interventionToSave->getData())
+                        ->setState('à lancer')
+                        ->setComment($interventionToSave['comment']->getData())
+                        ->setAnswers($interventionToSave['select']->getData())
+                    ;
+
+                    $em->persist($vehicleIntervention);
+                }
+            }
+
+            foreach ($formIntervention->get('pictures')->getData() as $file) {
+                if ($file === null) {
                     continue;
                 }
 
-                $vehicleIntervention = new VehicleIntervention();
+                $picture = (new Picture())
+                    ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
+                    ->setVehicle($vehicle);
+                $em->persist($picture);
 
-                $vehicleIntervention
-                    ->addVehicle($vehicle)
-                    ->addIntervention($interventionToSave->getData())
-                    ->setState('à lancer')
-                    ->setComment($interventionToSave['comment']->getData())
-                    ->setAnswers($interventionToSave['select']->getData())
-                ;
-
-
-                $em->persist($vehicleIntervention);
+                $file->move(
+                    sprintf('vehicle-pictures/%d', $vehicle->getId()),
+                    $picture->getName()
+                );
             }
 
             $em->flush();
+
+
             $this->addFlash(
                 'notice',
                 'L\'expertise à bien été enregistrée.'
@@ -130,11 +162,15 @@ class ExpertController extends Controller
             return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
         }
 
+        $pictures = $em->getRepository(Picture::class)
+            ->findByVehicle($vehicle);
+
         return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
+            'pictures' => $pictures,
         ));
     }
 }
