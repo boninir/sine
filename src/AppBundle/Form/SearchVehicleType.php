@@ -15,8 +15,14 @@ class SearchVehicleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('registration', TextType::class, array('label' => 'Immatriculation'))
-            ->add('frame', TextType::class, array('label' => 'N° châssis'))
+            ->add('registration', TextType::class, array(
+                'label' => 'Immatriculation',
+                'required' => false)
+            )
+            ->add('frame', TextType::class, array(
+                'label' => 'N° châssis',
+                'required' => false)
+            )
         ;
     }
 
