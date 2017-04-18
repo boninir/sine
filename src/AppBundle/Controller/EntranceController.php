@@ -2,79 +2,39 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class ExpertController extends Controller
+class EntranceController extends Controller
 {
     /**
-     * @Route("/expert", name="expert")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/entrance", name="entrance")
+     * @Template
      */
-    public function expertIndexAction()
+    public function indexAction()
     {
         $vehicles = $this->getDoctrine()
             ->getRepository('AppBundle:Vehicle')
-            ->findVehicleToExpertise();
+            ->findVehicleToControl();
 
-        return $this->render('AppBundle:Expert:expert.html.twig', array(
-            'vehicles' => $vehicles,
-        ));
+        return ['vehicles' => $vehicles];
     }
 
     /**
-     * @Route("/expert/addVehicle", name="add-vehicle")
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/control/{id}", name="control")
+     * @Template
      */
-    public function addVehicleAction(Request $request)
+    public function controlAction(Vehicle $vehicle, Request $request)
     {
-        $vehicle = new Vehicle();
-        $form = $this->createForm(VehicleType::class, $vehicle);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicle = $form->getData();
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vehicle);
-            $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Le véhicule a bien été enregistré.'
-            );
-
-            return $this->redirectToRoute('expert');
-        }
-
-        return $this->render('AppBundle:Expert:addVehicle.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * @Route("/expertise/{id}", name="expertise")
-     * @param Vehicle $vehicle
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function processExpertiseAction(Vehicle $vehicle, Request $request)
-    {
-        if (count($vehicle->getInterventions()) > 0) {
-            return $this->redirectToRoute('expert');
+        if (count($vehicle->getInterventions()) === 0) {
+            return $this->redirectToRoute('entrance');
         }
 
         $form = $this->createForm(VehicleType::class, $vehicle);
@@ -103,7 +63,7 @@ class ExpertController extends Controller
                 'Les informations ont bien été mises à jour.'
             );
 
-            return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
+            return $this->redirectToRoute('control', array('id' => $vehicle->getId()));
         }
 
         $formIntervention->handleRequest($request);
@@ -163,18 +123,18 @@ class ExpertController extends Controller
                 'L\'expertise à bien été enregistrée.'
             );
 
-            return $this->redirectToRoute('expert');
+            return $this->redirectToRoute('entrance');
         }
 
         $pictures = $em->getRepository(Picture::class)
             ->findByVehicle($vehicle);
 
-        return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
+        return [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
             'pictures' => $pictures,
-        ));
+        ];
     }
 }
