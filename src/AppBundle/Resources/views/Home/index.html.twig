@@ -25,6 +25,15 @@
             {% endfor %}
         </div>
 
+        <div class="row">
+            {% for flash_message in app.session.flashBag.get('warning') %}
+                <div class="alert alert-warning alert-dismissible flash-notice" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+        </div>
+
     {% if vehicle is not empty %}
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -61,14 +70,15 @@
                         {% set class = 'has-success' %}
                         {% set icon = 'ok' %}
                     {% endif %}
-                        <div class="row {{ class }} has-feedback">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
-                            <div class="col-md-5">
-                                {{ intervention.state }}
-                                <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
-                            </div>
+
+                    <div class="row {{ class }} has-feedback">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
+                        <div class="col-md-5">
+                            {{ intervention.state }}
+                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
+                    </div>
                 {% endfor %}
 
                 <div class="row">
@@ -109,13 +119,13 @@
                 <div class="row">
                     <div class="text-center">
                         <span class="col-md-1"></span>
-                        <h2><span class="col-md-10 label label-info">Cosmétique</span></h2>
+                        <h2><span class="col-md-10 label label-info">Intérieur</span></h2>
                         <span class="col-md-1"></span>
                     </div>
                 </div>
                 <br>
 
-                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Cosmétique' %}
+                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Intérieur' %}
 
                     {% set class = '' %}
                     {% set icon = '' %}
