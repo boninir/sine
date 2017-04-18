@@ -40,10 +40,30 @@ class DefaultController extends Controller
                     'notice',
                     'Le véhicule que vous recherchez n\'existe pas'
                 );
+
+                return $this->render('AppBundle:Home:index.html.twig', array(
+                    'form' => $searchForm->createView(),
+                    'vehicle' => null,
+                    'progress' => 0,
+                ));
+            }
+
+            if ($vehicle->getInterventions()->count() == 0) {
+                $this->addFlash(
+                    'warning',
+                    'Le véhicule est en cours d\'expertise.
+                    Son suivi sera disponible une fois le contrôle d\'entrée effectué'
+                );
+
+                return $this->render('AppBundle:Home:index.html.twig', array(
+                    'form' => $searchForm->createView(),
+                    'vehicle' => null,
+                    'progress' => 0,
+                ));
             }
 
             $finish = count($emIntervention->findBy(array('vehicle' => $vehicle, 'state' => 'terminé')));
-            $totalIntervention = $vehicle->getInterventions()->count();
+            $totalIntervention = $vehicle->getInterventions()->count() == 0 ? 1 : $vehicle->getInterventions()->count();
 
             $progress = ($finish / $totalIntervention) * 100;
 
