@@ -118,11 +118,18 @@ class Vehicle
      */
     private $interventions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="vehicle")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pictures;
+
 
     public function __construct()
     {
         $this->creationDate = new \Datetime();
         $this->interventions = new ArrayCollection();
+        $this->pictures = new ArrayCollection();
     }
 
     /**
@@ -458,7 +465,7 @@ class Vehicle
      */
     public function addIntervention(Intervention $intervention)
     {
-        $this->interventions = $intervention;
+        $this->interventions[] = $intervention;
 
         return $this;
     }
@@ -471,6 +478,46 @@ class Vehicle
     public function removeIntervention(Intervention $intervention)
     {
         $this->interventions->removeElement($intervention);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setPictures($pictures)
+    {
+        $this->pictures = $pictures;
+    }
+
+    /**
+     * @param Picture $picture
+     *
+     * @return mixed
+     */
+    public function addPicture(Picture $picture)
+    {
+        $this->pictures[] = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @param Picture $picture
+     *
+     * @return mixed
+     */
+    public function removePicture(Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
 
         return $this;
     }

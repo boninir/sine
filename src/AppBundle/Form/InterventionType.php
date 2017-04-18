@@ -19,19 +19,37 @@ class InterventionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('comment', TextareaType::class, [
-                'label' => false,
-                'mapped' => false,
-                'required' => false,
-            ])
-            ->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) {
-                if ($event->getData() === null) {
+            ->addEventListener(FormEvents::POST_SET_DATA, function(FormEvent $event) use($options) {
+                $intervention = $event->getData();
+                $form = $event->getForm();
+                if ($intervention === null) {
+                    $form->add('comment', TextareaType::class, [
+                        'label' => false,
+                        'mapped' => false,
+                        'required' => false,
+                    ]);
+
                     return;
                 }
 
-                $form = $event->getForm();
 
-                if (empty($event->getData()->getAnswers())) {
+                $value = null;
+                foreach ($options['vehicle']->getInterventions() as $vehicleIntervention) {
+                    if ($vehicleIntervention->getIntervention() === $intervention) {
+                        $value = $vehicleIntervention;
+
+                        break;
+                    }
+                }
+
+                $form->add('comment', TextareaType::class, [
+                    'label' => false,
+                    'mapped' => false,
+                    'required' => false,
+                    'data' => $value === null ? null : $value->getComment()
+                ]);
+
+                if (empty($intervention->getAnswers())) {
                     $form->add('select', ChoiceType::class, [
                         'choices' => [true],
                         'label' => false,
@@ -48,16 +66,18 @@ class InterventionType extends AbstractType
                                 "data-onstyle" => "success",
                                 "data-offstyle" => "danger",
                             ];
-                        }
+                        },
+                        'data' => $value === null ? [] : $value->getAnswers(),
                     ]);
                 } else {
                     $form->add('select', ChoiceType::class, [
-                        'choices' => $event->getData()->getAnswers(),
+                        'choices' => $intervention->getAnswers(),
                         'label' => false,
                         'choice_label' => function($value) { return $value; },
                         'mapped' => false,
                         'expanded' => true,
                         'multiple' => true,
+                        'data' => $value === null ? [] : $value->getAnswers(),
                     ]);
                 }
             }
@@ -69,9 +89,10 @@ class InterventionType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => Intervention::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => Intervention::class,
+            'vehicle' => null,
+        ]);
     }
 
     /**
