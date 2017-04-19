@@ -40,66 +40,13 @@ class WorkshopController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $interventions = $this->getDoctrine()
-            ->getRepository(Intervention::class)
+            ->getRepository(VehicleIntervention::class)
             ->findByTypeInterventionTransition('to_mechanical');
 
-        $formIntervention = $this->createForm(
-            ExpertiseType::class,
-            ['interventions' => $interventions],
-            ['vehicle' => $vehicle]
-        );
-
-        $formIntervention->handleRequest($request);
-
-        // if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
-
-        //     $interventionsToSave = $formIntervention->get('interventions');
-
-        //     foreach ($interventionsToSave as $interventionToSave) {
-        //         $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
-        //             ->findOneBy([
-        //                 'vehicle' => $vehicle,
-        //                 'intervention' => $interventionToSave->getData()
-        //             ]);
-
-        //         if (!$interventionToSave['select']->getData() && $vehicleIntervention !== null) {
-        //             $em->remove($vehicleIntervention);
-        //         } elseif ($vehicleIntervention !== null) {
-        //             $vehicleIntervention
-        //                 ->setComment($interventionToSave['comment']->getData())
-        //                 ->setAnswers($interventionToSave['select']->getData())
-        //             ;
-        //         } elseif ($interventionToSave['select']->getData()) {
-        //             $vehicleIntervention = (new VehicleIntervention())
-        //                 ->setVehicle($vehicle)
-        //                 ->addIntervention($interventionToSave->getData())
-        //                 ->setComment($interventionToSave['comment']->getData())
-        //                 ->setAnswers($interventionToSave['select']->getData())
-        //             ;
-
-        //             $em->persist($vehicleIntervention);
-        //         }
-        //     }
-
-        //     $workflow = $this->container->get('workflow.vehicle');
-        //     $workflow->can($vehicle, 'expertised');
-        //     $workflow->apply($vehicle, 'expertised');
-
-        //     $em->flush();
-
-        //     $this->addFlash(
-        //         'notice',
-        //         'L\'expertise à bien été enregistrée.'
-        //     );
-
-        //     return $this->redirectToRoute('expert');
-        // }
-
-        return $this->render('AppBundle:Workshop:processMechanical.html.twig', array(
+        return $this->render('AppBundle:Workshop:processMechanical.html.twig', [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
-            'formIntervention' => $formIntervention->createView()
-        ));
+        ]);
     }
 
     /**

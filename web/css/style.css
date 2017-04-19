@@ -37,3 +37,15 @@ body > .container {
 code {
     font-size: 80%;
 }
+
+.btn-group .btn:not(.active) {
+    font-weight: normal;
+    border: none;
+    margin-top: 1px;
+}
+
+.btn-group .btn.active {
+    font-weight: bold;
+    border: 1px solid #000;
+    margin-top: 0;
+}

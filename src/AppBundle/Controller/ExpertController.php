@@ -158,9 +158,9 @@ class ExpertController extends Controller
                 );
             }
 
-            $workflow = $this->container->get('workflow.vehicle');
-            $workflow->can($vehicle, 'expertised');
-            $workflow->apply($vehicle, 'expertised');
+            $machine = $this->container->get('state_machine.vehicle');
+            $machine->can($vehicle, 'expertised');
+            $machine->apply($vehicle, 'expertised');
 
             $em->flush();
 

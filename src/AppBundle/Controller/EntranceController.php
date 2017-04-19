@@ -115,9 +115,38 @@ class EntranceController extends Controller
                 );
             }
 
-            $workflow = $this->container->get('workflow.vehicle');
-            $workflow->can($vehicle, 'controled');
-            $workflow->apply($vehicle, 'controled');
+            $interventionType = [];
+
+            foreach ($vehicle->getInterventions() as $vehicleIntervention) {
+                if ($vehicleIntervention->getState() === VehicleIntervention::STATE_DONE) {
+                    continue;
+                }
+
+                $typeIntervention = $vehicleIntervention->getIntervention()->getTypeIntervention();
+
+                if (!in_array($typeIntervention, $interventionType)) {
+                    $interventionType[] = $typeIntervention;
+                }
+            }
+
+            $typeToLaunch = null;
+            foreach ($interventionType as $type) {
+                if ($typeToLaunch === null) {
+                    $priority = $type->getPriority();
+                    $typeToLaunch = $type;
+
+                    continue;
+                }
+
+                if ($priority < $type->getPriority()) {
+                    $priority = $type->getPriority();
+                    $typeToLaunch = $type;
+                }
+            }
+
+            $machine = $this->container->get('state_machine.vehicle');
+            $machine->can($vehicle, $typeToLaunch->getTransition());
+            $machine->apply($vehicle, $typeToLaunch->getTransition());
 
             $em->flush();
 

@@ -10,14 +10,4 @@ namespace AppBundle\Repository;
  */
 class InterventionRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByTypeInterventionTransition($transition)
-    {
-        return $this->createQueryBuilder('i')
-            ->join('i.typeIntervention', 't')
-            ->where('t.transition = :transition')
-            ->setParameter('transition', $transition)
-            ->getQuery()
-            ->execute()
-        ;
-    }
 }

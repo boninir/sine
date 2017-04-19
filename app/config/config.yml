@@ -50,11 +50,7 @@ framework:
                     from: inProgress
                     to: done
         vehicle:
-            type: 'workflow'
-            marking_store:
-                type: 'single_state'
-                arguments:
-                    - 'state'
+            type: 'state_machine'
             supports:
                 - AppBundle\Entity\Vehicle
             places:
@@ -71,23 +67,20 @@ framework:
                 expertised:
                     from: expert
                     to: control
-                controled:
-                    from: control
-                    to: mechanical
                 to_mechanical:
-                    from: [bodywork, cosmetic, cleaning, photo]
+                    from: [control, bodywork, cosmetic, cleaning, photo]
                     to: mechanical
                 to_bodywork:
-                    from: [mechanical, cosmetic, cleaning, photo]
+                    from: [control, mechanical, cosmetic, cleaning, photo]
                     to: bodywork
                 to_cosmetic:
-                    from: [bodywork, mechanical, cleaning, photo]
+                    from: [control, bodywork, mechanical, cleaning, photo]
                     to: cosmetic
                 to_cleaning:
-                    from: [bodywork, cosmetic, mechanical, photo]
+                    from: [control, bodywork, cosmetic, mechanical, photo]
                     to: cleaning
                 to_photo:
-                    from: [bodywork, cosmetic, cleaning, mechanical]
+                    from: [control, bodywork, cosmetic, cleaning, mechanical]
                     to: photo
                 validated:
                     from: [mechanical, bodywork, cosmetic, cleaning, photo]
