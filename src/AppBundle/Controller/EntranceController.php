@@ -22,7 +22,7 @@ class EntranceController extends Controller
     {
         $vehicles = $this->getDoctrine()
             ->getRepository('AppBundle:Vehicle')
-            ->findVehicleToControl();
+            ->findByState(Vehicle::STATE_CONTROL);
 
         return ['vehicles' => $vehicles];
     }
@@ -33,7 +33,7 @@ class EntranceController extends Controller
      */
     public function controlAction(Vehicle $vehicle, Request $request)
     {
-        if (count($vehicle->getInterventions()) === 0) {
+        if ($vehicle->getState() !== Vehicle::STATE_CONTROL) {
             return $this->redirectToRoute('entrance');
         }
 
@@ -115,8 +115,11 @@ class EntranceController extends Controller
                 );
             }
 
-            $em->flush();
+            $workflow = $this->container->get('workflow.vehicle');
+            $workflow->can($vehicle, 'controled');
+            $workflow->apply($vehicle, 'controled');
 
+            $em->flush();
 
             $this->addFlash(
                 'notice',

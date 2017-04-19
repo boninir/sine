@@ -18,11 +18,11 @@
         </div>
 
         <div class="row">
-            {% if vehicleInterventions is empty %}
+            {% if vehicles is empty %}
                 <div class="alert alert-warning text-center" role="alert">Aucun véhicule n'est actuellement disponible.</div>
             {% else %}
-                {% for vehicleIntervention in vehicleInterventions %}
-
+                {% for vehicle in vehicles %}
+                    {{ vehicle.mark }}
                 {% endfor %}
             {% endif %}
         </div>

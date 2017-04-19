@@ -59,7 +59,7 @@
                         </ul>
                     </li>
                 {% endif %}
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('ROLE_USER') %}
                     <li>
                         <a href="{{ path('logout') }}">Déconnexion</a>
                     </li>

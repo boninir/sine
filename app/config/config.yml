@@ -33,7 +33,7 @@ framework:
         intervention:
             type: 'workflow'
             marking_store:
-                type: 'multiple_state'
+                type: 'single_state'
                 arguments:
                     - 'state'
             supports:
@@ -52,15 +52,14 @@ framework:
         vehicle:
             type: 'workflow'
             marking_store:
-                type: 'multiple_state'
+                type: 'single_state'
                 arguments:
                     - 'state'
             supports:
                 - AppBundle\Entity\Vehicle
             places:
-                - create
                 - expert
-                - controle
+                - control
                 - mechanical
                 - bodywork
                 - cosmetic
@@ -69,28 +68,27 @@ framework:
                 - validate
                 - finish
             transitions:
-                created:
-                    from: create
-                    to: expert
                 expertised:
                     from: expert
-                    to: controle
+                    to: control
                 controled:
-                    from: controle
-                    to:
-                        - mechanical
-                        - bodywork
-                        - cosmetic
-                        - cleaning
-                        - photo
-                updated:
-                    from: [mechanical, bodywork, cosmetic, cleaning, photo]
-                    to:
-                        - mechanical
-                        - bodywork
-                        - cosmetic
-                        - cleaning
-                        - photo
+                    from: control
+                    to: mechanical
+                to_mechanical:
+                    from: [bodywork, cosmetic, cleaning, photo]
+                    to: mechanical
+                to_bodywork:
+                    from: [mechanical, cosmetic, cleaning, photo]
+                    to: bodywork
+                to_cosmetic:
+                    from: [bodywork, mechanical, cleaning, photo]
+                    to: cosmetic
+                to_cleaning:
+                    from: [bodywork, cosmetic, mechanical, photo]
+                    to: cleaning
+                to_photo:
+                    from: [bodywork, cosmetic, cleaning, mechanical]
+                    to: photo
                 validated:
                     from: [mechanical, bodywork, cosmetic, cleaning, photo]
                     to: validate

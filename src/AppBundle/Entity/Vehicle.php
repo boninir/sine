@@ -13,6 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Vehicle
 {
+    const STATE_EXPERT = 'expert';
+    const STATE_CONTROL = 'control';
+
     /**
      * @var int
      *
@@ -109,7 +112,7 @@ class Vehicle
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=50, nullable=true)
+     * @ORM\Column(name="state", type="json_array", nullable=true)
      */
     private $state;
 
@@ -135,7 +138,7 @@ class Vehicle
     public function __construct()
     {
         $this->creationDate = new \Datetime();
-        $this->state = 'created';
+        $this->state = 'expert';
         $this->interventions = new ArrayCollection();
         $this->pictures = new ArrayCollection();
     }
@@ -444,6 +447,8 @@ class Vehicle
     public function setState($state)
     {
         $this->state = $state;
+
+        return $this;
     }
 
     /**

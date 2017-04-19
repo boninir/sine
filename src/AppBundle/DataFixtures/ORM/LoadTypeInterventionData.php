@@ -11,27 +11,35 @@ class LoadTypeInterventionData extends AbstractFixture implements OrderedFixture
 {
     public function load(ObjectManager $manager)
     {
-        $mechanical = new TypeIntervention();
-        $mechanical->setDenomination('Mécanique');
+        $mechanical = (new TypeIntervention())
+            ->setDenomination('Mécanique')
+            ->setPriority(1)
+            ->setTransition('to_mechanical');
         $manager->persist($mechanical);
 
-        $body = new TypeIntervention();
-        $body->setDenomination('Carrosserie');
-        $manager->persist($body);
+        $bodywork = (new TypeIntervention())
+            ->setDenomination('Carrosserie')
+            ->setPriority(2)
+            ->setTransition('to_bodywork');
+        $manager->persist($bodywork);
 
-        $inside = new TypeIntervention();
-        $inside->setDenomination('Intérieur');
-        $manager->persist($inside);
+        $cosmetic = (new TypeIntervention())
+            ->setDenomination('Intérieur')
+            ->setPriority(3)
+            ->setTransition('to_cosmetic');
+        $manager->persist($cosmetic);
 
-        $cleaning = new TypeIntervention();
-        $cleaning->setDenomination('Nettoyage');
+        $cleaning = (new TypeIntervention())
+            ->setDenomination('Nettoyage')
+            ->setPriority(4)
+            ->setTransition('to_cleaning');
         $manager->persist($cleaning);
 
         $manager->flush();
 
         $this->addReference('mechanical', $mechanical);
-        $this->addReference('body', $body);
-        $this->addReference('inside', $inside);
+        $this->addReference('bodywork', $bodywork);
+        $this->addReference('cosmetic', $cosmetic);
         $this->addReference('cleaning', $cleaning);
     }
 

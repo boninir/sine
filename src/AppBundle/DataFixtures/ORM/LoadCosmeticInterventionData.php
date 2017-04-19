@@ -7,11 +7,11 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadInsideInterventionData extends AbstractFixture implements OrderedFixtureInterface
+class LoadCosmeticInterventionData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $type = $this->getReference('inside');
+        $type = $this->getReference('cosmetic');
 
         $intervention1 = (new Intervention())
             ->setDenomination('Réparation tableau de bord')

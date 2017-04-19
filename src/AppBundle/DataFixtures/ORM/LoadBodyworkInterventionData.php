@@ -7,11 +7,11 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadBodyInterventionData extends AbstractFixture implements OrderedFixtureInterface
+class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $type = $this->getReference('body');
+        $type = $this->getReference('bodywork');
 
         $intervention1 = (new Intervention())
             ->setDenomination('PC AV')

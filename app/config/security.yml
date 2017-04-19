@@ -11,6 +11,7 @@ security:
         ROLE_PAINTER:       ROLE_USER
         ROLE_CLEANER:       ROLE_USER
         ROLE_ADMIN:
+            - ROLE_USER
             - ROLE_EXPERT
             - ROLE_SUBCONTRACTOR
             - ROLE_MECHANICIAN

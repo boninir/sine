@@ -10,23 +10,4 @@ namespace AppBundle\Repository;
  */
 class VehicleRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findVehicleToExpertise()
-    {
-        return $this->createQueryBuilder('v')
-            ->leftJoin('v.interventions', 'i')
-            ->where('i.id is null')
-            ->getQuery()
-            ->execute()
-        ;
-    }
-
-    public function findVehicleToControl()
-    {
-        return $this->createQueryBuilder('v')
-            ->leftJoin('v.interventions', 'i')
-            ->where('i.id is not null')
-            ->getQuery()
-            ->execute()
-        ;
-    }
 }

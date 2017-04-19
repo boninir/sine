@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class VehicleIntervention
 {
+    const STATE_DONE = 'done';
+
     /**
      * @var int
      *
@@ -24,7 +26,7 @@ class VehicleIntervention
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=50)
+     * @ORM\Column(name="state", type="json_array", nullable=true)
      */
     private $state;
 
@@ -93,6 +95,7 @@ class VehicleIntervention
     public function __construct()
     {
         $this->createdAt = new \Datetime();
+        $this->state = 'toStart';
     }
 
     /**

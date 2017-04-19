@@ -24,7 +24,7 @@ class ExpertController extends Controller
     {
         $vehicles = $this->getDoctrine()
             ->getRepository('AppBundle:Vehicle')
-            ->findVehicleToExpertise();
+            ->findByState(Vehicle::STATE_EXPERT);
 
         return $this->render('AppBundle:Expert:expert.html.twig', array(
             'vehicles' => $vehicles,
@@ -74,7 +74,10 @@ class ExpertController extends Controller
      */
     public function processExpertiseAction(Vehicle $vehicle, Request $request)
     {
-        $workflow = $this->get('workflow.intervention');
+        if ($vehicle->getState() !== Vehicle::STATE_EXPERT) {
+            return $this->redirectToRoute('expert');
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(VehicleType::class, $vehicle);
@@ -126,12 +129,10 @@ class ExpertController extends Controller
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
-
                 } elseif ($interventionToSave['select']->getData()) {
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
                         ->addIntervention($interventionToSave->getData())
-                        ->setState('à lancer')
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
@@ -157,8 +158,11 @@ class ExpertController extends Controller
                 );
             }
 
-            $em->flush();
+            $workflow = $this->container->get('workflow.vehicle');
+            $workflow->can($vehicle, 'expertised');
+            $workflow->apply($vehicle, 'expertised');
 
+            $em->flush();
 
             $this->addFlash(
                 'notice',
