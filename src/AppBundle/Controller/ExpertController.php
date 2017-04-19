@@ -11,6 +11,7 @@ use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Workflow\Exception\LogicException;
 
 class ExpertController extends Controller
 {
@@ -73,11 +74,12 @@ class ExpertController extends Controller
      */
     public function processExpertiseAction(Vehicle $vehicle, Request $request)
     {
-        if (count($vehicle->getInterventions()) > 0) {
-            return $this->redirectToRoute('expert');
-        }
+
+        $workflow = $this->get('workflow.intervention');
+        $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(VehicleType::class, $vehicle);
+
         $interventions = $this->getDoctrine()
             ->getRepository('AppBundle:Intervention')
             ->findBy(array('required' => 1));
@@ -87,7 +89,6 @@ class ExpertController extends Controller
             ['interventions' => $interventions],
             ['vehicle' => $vehicle]
         );
-        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
@@ -111,9 +112,9 @@ class ExpertController extends Controller
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
 
             $interventionsToSave = $formIntervention->get('interventions');
+
             foreach ($interventionsToSave as $interventionToSave) {
-                $vehicleIntervention = $em
-                    ->getRepository(VehicleIntervention::class)
+                $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
                     ->findOneBy([
                         'vehicle' => $vehicle,
                         'intervention' => $interventionToSave->getData()
@@ -126,6 +127,11 @@ class ExpertController extends Controller
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
+
+                    if ($workflow->can($vehicleIntervention, 'expertised')) {
+                        $workflow->apply($vehicleIntervention, 'expertised');
+                    }
+
                 } elseif ($interventionToSave['select']->getData()) {
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
@@ -134,6 +140,10 @@ class ExpertController extends Controller
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
+
+                    if ($workflow->can($vehicleIntervention, 'expertised')) {
+                        $workflow->apply($vehicleIntervention, 'expertised');
+                    }
 
                     $em->persist($vehicleIntervention);
                 }
@@ -147,6 +157,7 @@ class ExpertController extends Controller
                 $picture = (new Picture())
                     ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
                     ->setVehicle($vehicle);
+
                 $em->persist($picture);
 
                 $file->move(
