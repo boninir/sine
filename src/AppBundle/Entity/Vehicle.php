@@ -107,6 +107,13 @@ class Vehicle
     private $sapVoucher;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string", length=50, nullable=true)
+     */
+    private $state;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Fuel")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -128,6 +135,7 @@ class Vehicle
     public function __construct()
     {
         $this->creationDate = new \Datetime();
+        $this->state = 'created';
         $this->interventions = new ArrayCollection();
         $this->pictures = new ArrayCollection();
     }
@@ -420,6 +428,22 @@ class Vehicle
     public function getSapVoucher()
     {
         return $this->sapVoucher;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 
     /**

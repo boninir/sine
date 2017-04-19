@@ -28,6 +28,12 @@ class TypeIntervention
      */
     private $denomination;
 
+    /**
+     * @var priority
+     *
+     * @ORM\Column(name="priority", type="integer")
+     */
+    private $priority;
 
     /**
      * Get id
@@ -61,6 +67,22 @@ class TypeIntervention
     public function getDenomination()
     {
         return $this->denomination;
+    }
+
+    /**
+     * @return priority
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param priority $priority
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
     }
 }
 

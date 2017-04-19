@@ -39,6 +39,26 @@ framework:
             supports:
                 - AppBundle\Entity\VehicleIntervention
             places:
+                - toStart
+                - inProgress
+                - done
+            transitions:
+                started:
+                    from: toStart
+                    to: inProgress
+                finished:
+                    from: inProgress
+                    to: done
+        vehicle:
+            type: 'workflow'
+            marking_store:
+                type: 'multiple_state'
+                arguments:
+                    - 'state'
+            supports:
+                - AppBundle\Entity\Vehicle
+            places:
+                - create
                 - expert
                 - controle
                 - mechanical
@@ -49,6 +69,9 @@ framework:
                 - validate
                 - finish
             transitions:
+                created:
+                    from: create
+                    to: expert
                 expertised:
                     from: expert
                     to: controle

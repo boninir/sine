@@ -74,7 +74,6 @@ class ExpertController extends Controller
      */
     public function processExpertiseAction(Vehicle $vehicle, Request $request)
     {
-
         $workflow = $this->get('workflow.intervention');
         $em = $this->getDoctrine()->getManager();
 
@@ -128,10 +127,6 @@ class ExpertController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
 
-                    if ($workflow->can($vehicleIntervention, 'expertised')) {
-                        $workflow->apply($vehicleIntervention, 'expertised');
-                    }
-
                 } elseif ($interventionToSave['select']->getData()) {
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
@@ -140,10 +135,6 @@ class ExpertController extends Controller
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
-
-                    if ($workflow->can($vehicleIntervention, 'expertised')) {
-                        $workflow->apply($vehicleIntervention, 'expertised');
-                    }
 
                     $em->persist($vehicleIntervention);
                 }
