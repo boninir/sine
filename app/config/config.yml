@@ -29,6 +29,51 @@ framework:
     assets: ~
     php_errors:
         log: true
+    workflows:
+        intervention:
+            type: 'workflow'
+            marking_store:
+                type: 'multiple_state'
+                arguments:
+                    - 'state'
+            supports:
+                - AppBundle\Entity\VehicleIntervention
+            places:
+                - expert
+                - controle
+                - mechanical
+                - bodywork
+                - cosmetic
+                - cleaning
+                - photo
+                - validate
+                - finish
+            transitions:
+                expertised:
+                    from: expert
+                    to: controle
+                controled:
+                    from: controle
+                    to:
+                        - mechanical
+                        - bodywork
+                        - cosmetic
+                        - cleaning
+                        - photo
+                updated:
+                    from: [mechanical, bodywork, cosmetic, cleaning, photo]
+                    to:
+                        - mechanical
+                        - bodywork
+                        - cosmetic
+                        - cleaning
+                        - photo
+                validated:
+                    from: [mechanical, bodywork, cosmetic, cleaning, photo]
+                    to: validate
+                terminated:
+                    from: validate
+                    to: finish
 
 assetic:
     debug:          '%kernel.debug%'
