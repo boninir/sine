@@ -14,8 +14,6 @@ class WorkshopController extends Controller
 {
     /**
      * @Route("/mechanical", name="mechanical")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function mechanicalAction()
     {
@@ -36,8 +34,9 @@ class WorkshopController extends Controller
      */
     public function processMechanical(Vehicle $vehicle, Request $request)
     {
-        $workflow = $this->get('workflow.intervention');
-        $em = $this->getDoctrine()->getManager();
+        if ($vehicle->getState() !== 'mechanical') {
+            return $this->redirectToRoute('mechanical');
+        }
 
         $interventions = $this->getDoctrine()
             ->getRepository(VehicleIntervention::class)
@@ -51,8 +50,6 @@ class WorkshopController extends Controller
 
     /**
      * @Route("/bodywork", name="bodywork")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function bodyworkAction()
     {
@@ -66,9 +63,29 @@ class WorkshopController extends Controller
     }
 
     /**
-     * @Route("/cosmetic", name="cosmetic")
+     * @param Vehicle $vehicle
+     * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/process-bodywork/{id}", name="process-bodywork")
+     */
+    public function processBodywork(Vehicle $vehicle, Request $request)
+    {
+        if ($vehicle->getState() !== 'bodywork') {
+            return $this->redirectToRoute('bodywork');
+        }
+
+        $interventions = $this->getDoctrine()
+            ->getRepository(VehicleIntervention::class)
+            ->findByTypeInterventionTransition('to_bodywork');
+
+        return $this->render('AppBundle:Workshop:processBodywork.html.twig', [
+            'vehicle' => $vehicle,
+            'interventions' => $interventions,
+        ]);
+    }
+
+    /**
+     * @Route("/cosmetic", name="cosmetic")
      */
     public function cosmeticAction()
     {
@@ -82,9 +99,29 @@ class WorkshopController extends Controller
     }
 
     /**
-     * @Route("/cleaning", name="cleaning")
+     * @param Vehicle $vehicle
+     * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/process-cosmetic/{id}", name="process-cosmetic")
+     */
+    public function processCosmetic(Vehicle $vehicle, Request $request)
+    {
+        if ($vehicle->getState() !== 'cosmetic') {
+            return $this->redirectToRoute('cosmetic');
+        }
+
+        $interventions = $this->getDoctrine()
+            ->getRepository(VehicleIntervention::class)
+            ->findByTypeInterventionTransition('to_cosmetic');
+
+        return $this->render('AppBundle:Workshop:processCosmetic.html.twig', [
+            'vehicle' => $vehicle,
+            'interventions' => $interventions,
+        ]);
+    }
+
+    /**
+     * @Route("/cleaning", name="cleaning")
      */
     public function cleaningAction()
     {
@@ -98,9 +135,29 @@ class WorkshopController extends Controller
     }
 
     /**
-     * @Route("/photo", name="photo")
+     * @param Vehicle $vehicle
+     * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/process-cleaning/{id}", name="process-cleaning")
+     */
+    public function processCleaning(Vehicle $vehicle, Request $request)
+    {
+        if ($vehicle->getState() !== 'cleaning') {
+            return $this->redirectToRoute('cleaning');
+        }
+
+        $interventions = $this->getDoctrine()
+            ->getRepository(VehicleIntervention::class)
+            ->findByTypeInterventionTransition('to_cleaning');
+
+        return $this->render('AppBundle:Workshop:processCleaning.html.twig', [
+            'vehicle' => $vehicle,
+            'interventions' => $interventions,
+        ]);
+    }
+
+    /**
+     * @Route("/photo", name="photo")
      */
     public function photoAction()
     {
@@ -110,6 +167,20 @@ class WorkshopController extends Controller
 
         return $this->render('AppBundle:Workshop:photo.html.twig', array(
             'vehicles' => $vehicles,
+        ));
+    }
+
+    /**
+     * @Route("/process-photo/{id}", name="process-photo")
+     */
+    public function processPhotoAction(Vehicle $vehicle)
+    {
+        if ($vehicle->getState() !== 'photo') {
+            return $this->redirectToRoute('photo');
+        }
+
+        return $this->render('AppBundle:Workshop:processPhoto.html.twig', array(
+            'vehicle' => $vehicle,
         ));
     }
 }

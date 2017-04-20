@@ -10,3 +10,9 @@ services:
         arguments: [ '@security.password_encoder' ]
         tags:
             - { name: form.type }
+
+    app.listener.intervention_transition:
+        class: AppBundle\Listener\InterventionTransitionListener
+        arguments: ['@state_machine.vehicle', '@session']
+        tags:
+            - { name: kernel.event_subscriber }

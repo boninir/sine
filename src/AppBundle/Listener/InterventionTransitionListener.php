@@ -4,18 +4,28 @@ namespace AppBundle\Listener;
 
 use AppBundle\Entity\VehicleIntervention;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Workflow\Event\GuardEvent;
+use Symfony\Component\Workflow\Event\Event;
 
-class BlogPostReviewListener implements EventSubscriberInterface
+class InterventionTransitionListener implements EventSubscriberInterface
 {
-    public function applyVehicleTransition(GuardEvent $event)
+    private $machine;
+    private $session;
+
+    public function __construct($machine, $session)
+    {
+        $this->machine = $machine;
+        $this->session = $session;
+    }
+
+    public function applyVehicleTransition(Event $event)
     {
         $intervention = $event->getSubject();
         $type = $intervention->getIntervention()->getTypeIntervention();
         $interventionType = [];
 
         foreach ($intervention->getVehicle()->getInterventions() as $vehicleIntervention) {
-            if ($vehicleIntervention->getState() === VehicleIntervention::STATE_DONE) {
+            if ($vehicleIntervention->getState() === VehicleIntervention::STATE_DONE
+                || $intervention->getId() === $vehicleIntervention->getId()) {
                 continue;
             }
 
@@ -39,19 +49,28 @@ class BlogPostReviewListener implements EventSubscriberInterface
                 continue;
             }
 
-            if ($priority < $type->getPriority()) {
+            if ($priority > $type->getPriority()) {
                 $priority = $type->getPriority();
                 $typeToLaunch = $type;
             }
         }
 
-        $workflow->apply($vehicle, $typeToLaunch->getTransition());
+        $this->session->getFlashBag()->add(
+            'notice',
+            'Félicitation, toutes les interventions de ce véhicule sont terminées'
+        );
+
+        if ($typeToLaunch !== null) {
+            $this->machine->apply($intervention->getVehicle(), $typeToLaunch->getTransition());
+        } else {
+            $this->machine->apply($intervention->getVehicle(), 'to_photo');
+        }
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            'workflow.intervention.enter.finished' => array('applyVehicleTransition'),
+            'workflow.intervention.enter.done' => array('applyVehicleTransition'),
         );
     }
 }

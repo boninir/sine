@@ -31,11 +31,10 @@ framework:
         log: true
     workflows:
         intervention:
-            type: 'workflow'
+            type: 'state_machine'
             marking_store:
                 type: 'single_state'
-                arguments:
-                    - 'state'
+                arguments: ['state']
             supports:
                 - AppBundle\Entity\VehicleIntervention
             places:
@@ -51,6 +50,9 @@ framework:
                     to: done
         vehicle:
             type: 'state_machine'
+            marking_store:
+                type: 'single_state'
+                arguments: ['state']
             supports:
                 - AppBundle\Entity\Vehicle
             places:

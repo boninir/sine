@@ -90,7 +90,6 @@ class EntranceController extends Controller
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
                         ->addIntervention($interventionToSave->getData())
-                        ->setState('à lancer')
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
@@ -138,7 +137,7 @@ class EntranceController extends Controller
                     continue;
                 }
 
-                if ($priority < $type->getPriority()) {
+                if ($priority > $type->getPriority()) {
                     $priority = $type->getPriority();
                     $typeToLaunch = $type;
                 }

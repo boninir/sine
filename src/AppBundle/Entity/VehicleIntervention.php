@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class VehicleIntervention
 {
+    const STATE_IN_PROGRESS = 'inProgress';
     const STATE_DONE = 'done';
 
     /**

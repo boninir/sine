@@ -22,7 +22,46 @@
                 <div class="alert alert-warning text-center" role="alert">Aucun véhicule n'est actuellement disponible.</div>
             {% else %}
                 {% for vehicle in vehicles %}
-                    {{ vehicle.mark }}
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ vehicle.mark  ~ ' ' ~ vehicle.model ~ ' (' ~ vehicle.registration ~ ')'}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-7">- Marque : {{ vehicle.mark }}</div>
+                                <div class="col-md-5">- Modèle : {{ vehicle.model }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">- Immatriculation : {{ vehicle.registration }}</div>
+                                <div class="col-md-5">- Type : {{ vehicle.type }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">- CV : {{ vehicle.cv }}</div>
+                                <div class="col-md-5">- N° châssis : {{ vehicle.frame }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">- Couleur : {{ vehicle.color }}</div>
+                                <div class="col-md-5">- Kilomètres parcouru : {{ vehicle.kilometerTraveled }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">- Kilomètres au compteur : {{ vehicle.kilometerOnCounter }}</div>
+                                <div class="col-md-5">- Mise en service : {{ vehicle.releaseDate|date('d/m/Y') }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">- Bon SAP : {{ vehicle.sapVoucher }}</div>
+                                <div class="col-md-5">- Essence : {{ vehicle.fuel.denomination }}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7"></div>
+                                <div class="col-md-5">
+                                    <a href="{{ path('process-cosmetic', {'id': vehicle.id}) }}" class="btn btn-primary">
+                                        Procéder aux interventions
+                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endfor %}
             {% endif %}
         </div>
