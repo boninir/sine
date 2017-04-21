@@ -60,10 +60,10 @@
                     {% set class = '' %}
                     {% set icon = '' %}
 
-                    {% if intervention.state == 'à lancer' %}
+                    {% if intervention.state == 'toStart' %}
                         {% set class = 'has-error' %}
                         {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'en cours' %}
+                    {% elseif intervention.state == 'inProgress' %}
                         {% set class = 'has-warning' %}
                         {% set icon = 'repeat' %}
                     {% else %}
@@ -75,7 +75,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
                         <div class="col-md-5">
-                            {{ intervention.state }}
+                            {{ intervention.state|trans }}
                             <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -95,10 +95,10 @@
                     {% set class = '' %}
                     {% set icon = '' %}
 
-                    {% if intervention.state == 'à lancer' %}
+                    {% if intervention.state == 'toStart' %}
                         {% set class = 'has-error' %}
                         {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'en cours' %}
+                    {% elseif intervention.state == 'inProgress' %}
                         {% set class = 'has-warning' %}
                         {% set icon = 'repeat' %}
                     {% else %}
@@ -110,7 +110,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
                         <div class="col-md-5">
-                            {{ intervention.state }}
+                            {{ intervention.state|trans }}
                             <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -130,10 +130,10 @@
                     {% set class = '' %}
                     {% set icon = '' %}
 
-                    {% if intervention.state == 'à lancer' %}
+                    {% if intervention.state == 'toStart' %}
                         {% set class = 'has-error' %}
                         {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'en cours' %}
+                    {% elseif intervention.state == 'inProgress' %}
                         {% set class = 'has-warning' %}
                         {% set icon = 'repeat' %}
                     {% else %}
@@ -145,7 +145,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
                         <div class="col-md-5">
-                            {{ intervention.state }}
+                            {{ intervention.state|trans }}
                             <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -165,10 +165,10 @@
                     {% set class = '' %}
                     {% set icon = '' %}
 
-                    {% if intervention.state == 'à lancer' %}
+                    {% if intervention.state == 'toStart' %}
                         {% set class = 'has-error' %}
                         {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'en cours' %}
+                    {% elseif intervention.state == 'inProgress' %}
                         {% set class = 'has-warning' %}
                         {% set icon = 'repeat' %}
                     {% else %}
@@ -180,7 +180,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
                         <div class="col-md-5">
-                            {{ intervention.state }}
+                            {{ intervention.state|trans }}
                             <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -200,10 +200,10 @@
                     {% set class = '' %}
                     {% set icon = '' %}
 
-                    {% if intervention.state == 'à lancer' %}
+                    {% if intervention.state == 'toStart' %}
                         {% set class = 'has-error' %}
                         {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'en cours' %}
+                    {% elseif intervention.state == 'inProgress' %}
                         {% set class = 'has-warning' %}
                         {% set icon = 'repeat' %}
                     {% else %}
@@ -215,7 +215,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
                         <div class="col-md-5">
-                            {{ intervention.state }}
+                            {{ intervention.state|trans }}
                             <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                         </div>
                     </div>
@@ -226,6 +226,4 @@
         </div>
         {% endif %}
     </div>
-
-
 {% endblock %}
