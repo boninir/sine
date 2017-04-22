@@ -56,7 +56,7 @@ framework:
             supports:
                 - AppBundle\Entity\Vehicle
             places:
-                - expert
+                - expertise
                 - control
                 - mechanical
                 - bodywork
@@ -67,7 +67,7 @@ framework:
                 - finish
             transitions:
                 expertised:
-                    from: expert
+                    from: expertise
                     to: control
                 to_mechanical:
                     from: [control, bodywork, cosmetic, cleaning, photo]

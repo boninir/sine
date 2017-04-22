@@ -16,7 +16,7 @@
         {{ form_widget(form) }}
         <div class="pull-right">
             <input type="submit" value="Ajouter le véhicule" class="btn btn-success" />
-            <a href="{{ path('expert') }}" class="btn btn-primary">Retour</a>
+            <a href="{{ path('process', {type: 'expertise'}) }}" class="btn btn-primary">Retour</a>
         </div>
         {{ form_end(form) }}
     </div>

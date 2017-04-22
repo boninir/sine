@@ -2,86 +2,28 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Workflow\Exception\LogicException;
 
-class ExpertController extends Controller
+class ControlController extends Controller
 {
     /**
-     * @Route("/expert", name="expert")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/control/process/{id}", name="process-vehicle-control")
      */
-    public function expertIndexAction()
+    public function vehicleAction(Vehicle $vehicle, Request $request)
     {
-        $vehicles = $this->getDoctrine()
-            ->getRepository('AppBundle:Vehicle')
-            ->findByState(Vehicle::STATE_EXPERT);
-
-        return $this->render('AppBundle:Expert:expert.html.twig', array(
-            'vehicles' => $vehicles,
-        ));
-    }
-
-    /**
-     * @Route("/expert/addVehicle", name="add-vehicle")
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function addVehicleAction(Request $request)
-    {
-        $vehicle = new Vehicle();
-        $form = $this->createForm(VehicleType::class, $vehicle);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicle = $form->getData();
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vehicle);
-            $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Le véhicule a bien été enregistré.'
-            );
-
-            return $this->redirectToRoute('expert');
+        if ($vehicle->getState() !== Vehicle::STATE_CONTROL) {
+            return $this->redirectToRoute('process', ['type' => 'control']);
         }
 
-        return $this->render('AppBundle:Expert:addVehicle.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * @Route("/expertise/{id}", name="expertise")
-     * @param Vehicle $vehicle
-     * @param Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function processExpertiseAction(Vehicle $vehicle, Request $request)
-    {
-        if ($vehicle->getState() !== Vehicle::STATE_EXPERT) {
-            return $this->redirectToRoute('expert');
-        }
-
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(VehicleType::class, $vehicle);
-
         $interventions = $this->getDoctrine()
             ->getRepository('AppBundle:Intervention')
             ->findBy(array('required' => 1));
@@ -91,6 +33,7 @@ class ExpertController extends Controller
             ['interventions' => $interventions],
             ['vehicle' => $vehicle]
         );
+        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
@@ -106,7 +49,7 @@ class ExpertController extends Controller
                 'Les informations ont bien été mises à jour.'
             );
 
-            return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
+            return $this->redirectToRoute('process-vehicle-control', ['id' => $vehicle->getId()]);
         }
 
         $formIntervention->handleRequest($request);
@@ -114,9 +57,9 @@ class ExpertController extends Controller
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
 
             $interventionsToSave = $formIntervention->get('interventions');
-
             foreach ($interventionsToSave as $interventionToSave) {
-                $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
+                $vehicleIntervention = $em
+                    ->getRepository(VehicleIntervention::class)
                     ->findOneBy([
                         'vehicle' => $vehicle,
                         'intervention' => $interventionToSave->getData()
@@ -149,7 +92,6 @@ class ExpertController extends Controller
                 $picture = (new Picture())
                     ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
                     ->setVehicle($vehicle);
-
                 $em->persist($picture);
 
                 $file->move(
@@ -158,29 +100,58 @@ class ExpertController extends Controller
                 );
             }
 
+            $interventionType = [];
+
+            foreach ($vehicle->getInterventions() as $vehicleIntervention) {
+                if ($vehicleIntervention->getState() === VehicleIntervention::STATE_DONE) {
+                    continue;
+                }
+
+                $typeIntervention = $vehicleIntervention->getIntervention()->getTypeIntervention();
+
+                if (!in_array($typeIntervention, $interventionType)) {
+                    $interventionType[] = $typeIntervention;
+                }
+            }
+
+            $typeToLaunch = null;
+            foreach ($interventionType as $type) {
+                if ($typeToLaunch === null) {
+                    $priority = $type->getPriority();
+                    $typeToLaunch = $type;
+
+                    continue;
+                }
+
+                if ($priority > $type->getPriority()) {
+                    $priority = $type->getPriority();
+                    $typeToLaunch = $type;
+                }
+            }
+
             $machine = $this->container->get('state_machine.vehicle');
-            $machine->can($vehicle, 'expertised');
-            $machine->apply($vehicle, 'expertised');
+            $machine->can($vehicle, $typeToLaunch->getTransition());
+            $machine->apply($vehicle, $typeToLaunch->getTransition());
 
             $em->flush();
 
             $this->addFlash(
                 'notice',
-                'L\'expertise à bien été enregistrée.'
+                'Le contrôle à bien été enregistré.'
             );
 
-            return $this->redirectToRoute('expert');
+            return $this->redirectToRoute('process', ['type' => 'control']);
         }
 
         $pictures = $em->getRepository(Picture::class)
             ->findByVehicle($vehicle);
 
-        return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
+        return $this->render('AppBundle:Process:fullVehicle.html.twig', [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
             'pictures' => $pictures,
-        ));
+        ]);
     }
 }
