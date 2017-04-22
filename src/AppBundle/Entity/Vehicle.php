@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Vehicle
 {
-    const STATE_EXPERT = 'expert';
+    const STATE_EXPERTISE = 'expertise';
     const STATE_CONTROL = 'control';
 
     /**
@@ -138,7 +138,7 @@ class Vehicle
     public function __construct()
     {
         $this->creationDate = new \Datetime();
-        $this->state = 'expert';
+        $this->state = self::STATE_EXPERTISE;
         $this->interventions = new ArrayCollection();
         $this->pictures = new ArrayCollection();
     }
