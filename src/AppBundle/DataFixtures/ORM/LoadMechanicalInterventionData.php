@@ -77,6 +77,34 @@ class LoadMechanicalInterventionData extends AbstractFixture implements OrderedF
             ->setRequired(1);
         $manager->persist($intervention9);
 
+        $intervention10 = new Intervention();
+        $intervention10
+            ->setDenomination('Habitacle')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention10);
+
+        $intervention11 = new Intervention();
+        $intervention11
+            ->setDenomination('Huile')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention11);
+
+        $intervention12 = new Intervention();
+        $intervention12
+            ->setDenomination('Carburant')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention12);
+
+        $intervention13 = new Intervention();
+        $intervention13
+            ->setDenomination('Air')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention13);
+
         $manager->flush();
     }
 
