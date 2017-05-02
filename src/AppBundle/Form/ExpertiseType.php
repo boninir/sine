@@ -18,8 +18,8 @@ class ExpertiseType extends AbstractType
         $builder
             ->add('interventions', CollectionType::class, [
                 'entry_type'   => InterventionType::class,
-                'allow_add'    => true,
-                'allow_delete' => true,
+                /*'allow_add'    => true,
+                'allow_delete' => true,*/
                 'attr' => [
                     'data-add-label' => 'Ajouter une intervention',
                     'data-add-id' => 'add_intervention',
@@ -27,7 +27,8 @@ class ExpertiseType extends AbstractType
                 ],
                 'entry_options' => ['vehicle' => $options['vehicle']],
             ])
-            ->add('pictures', CollectionType::class, [
+
+            /*->add('pictures', CollectionType::class, [
                 'entry_type' => FileType::class,
                 'label'      => false,
                 'allow_add'    => true,
@@ -39,7 +40,7 @@ class ExpertiseType extends AbstractType
                 ],
                 'entry_options' => ['label' => false],
                 'required' => false,
-            ])
+            ])*/
         ;
     }
 

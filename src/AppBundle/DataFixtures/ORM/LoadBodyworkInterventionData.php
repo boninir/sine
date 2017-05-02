@@ -45,20 +45,6 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
         ;
         $manager->persist($intervention2);
 
-        $intervention3 = (new Intervention())
-            ->setDenomination('Capôt')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention3);
-
         $intervention4 = (new Intervention())
             ->setDenomination('Aile AV gauche')
             ->setTypeIntervention($type)
@@ -90,36 +76,6 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
         ;
         $manager->persist($intervention5);
 
-        $intervention6 = (new Intervention())
-            ->setDenomination('Porte AV gauche')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention6);
-
-        $intervention7 = (new Intervention())
-            ->setDenomination('Porte AV droite')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention7);
-
         $intervention8 = (new Intervention())
             ->setDenomination('Aile AR gauche')
             ->setTypeIntervention($type)
@@ -149,6 +105,36 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
             ])
         ;
         $manager->persist($intervention9);
+
+        $intervention6 = (new Intervention())
+            ->setDenomination('Porte AV gauche')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Redressage + peinture',
+                'Changer + peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention6);
+
+        $intervention7 = (new Intervention())
+            ->setDenomination('Porte AV droite')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Redressage + peinture',
+                'Changer + peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention7);
 
         $intervention10 = (new Intervention())
             ->setDenomination('Porte AR gauche')
@@ -180,34 +166,6 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
         ;
         $manager->persist($intervention11);
 
-        $intervention12 = (new Intervention())
-            ->setDenomination('Coffre')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention12);
-
-        $intervention13 = (new Intervention())
-            ->setDenomination('Toit')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention13);
-
         $intervention14 = (new Intervention())
             ->setDenomination('Bas de caisse gauche')
             ->setTypeIntervention($type)
@@ -236,34 +194,21 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
         ;
         $manager->persist($intervention15);
 
-        $intervention16 = (new Intervention())
-            ->setDenomination('Optique AV')
+        $intervention19 = (new Intervention())
+            ->setDenomination('Réparation jante')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'Gauche OK',
-                'Gauche à changer',
-                'Droit OK',
-                'Droit à changer',
+                'AV droite',
+                'AV gauche',
+                'AR droit',
+                'AR gauche',
             ])
         ;
-        $manager->persist($intervention16);
-
-        $intervention17 = (new Intervention())
-            ->setDenomination('Optique AR')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Gauche OK',
-                'Gauche à changer',
-                'Droit OK',
-                'Droit à changer',
-            ])
-        ;
-        $manager->persist($intervention17);
+        $manager->persist($intervention19);
 
         $intervention18 = (new Intervention())
-            ->setDenomination('Bas de caisse droit')
+            ->setDenomination('Rétroviseur droit')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
@@ -275,17 +220,84 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
         $manager->persist($intervention18);
 
         $intervention19 = (new Intervention())
-            ->setDenomination('Réparation jante alu')
+            ->setDenomination('Rétroviseur gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'AV droite',
-                'AV gauche',
-                'AR droit',
-                'AR gauche',
+                'OK',
+                'Réparation impact',
+                'À changer',
             ])
         ;
         $manager->persist($intervention19);
+
+        $intervention3 = (new Intervention())
+            ->setDenomination('Capôt')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Tôlerie',
+                'Peinture',
+                'Redressage + peinture',
+                'Changer + peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention3);
+
+        $intervention12 = (new Intervention())
+            ->setDenomination('Hayon/Lunette')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Redressage + peinture',
+                'Changer + peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention12);
+
+        $intervention13 = (new Intervention())
+            ->setDenomination('Toit')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention13);
+
+        $intervention20 = (new Intervention())
+            ->setDenomination('Montant gauche')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention20);
+
+        $intervention21 = (new Intervention())
+            ->setDenomination('Montant droit')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Tôlerie',
+                'Peinture',
+                'Non',
+            ])
+        ;
+        $manager->persist($intervention21);
 
         $manager->flush();
     }

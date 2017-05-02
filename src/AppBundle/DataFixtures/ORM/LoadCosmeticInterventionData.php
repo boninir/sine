@@ -49,7 +49,7 @@ class LoadCosmeticInterventionData extends AbstractFixture implements OrderedFix
         $manager->persist($intervention3);
 
         $intervention4 = (new Intervention())
-            ->setDenomination('Moquette de sol')
+            ->setDenomination('Réparation moquette de sol')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([

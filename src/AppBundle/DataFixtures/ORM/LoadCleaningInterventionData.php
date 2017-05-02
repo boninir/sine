@@ -27,6 +27,14 @@ class LoadCleaningInterventionData extends AbstractFixture implements OrderedFix
             ->setRequired(1);
         $manager->persist($intervention2);
 
+        $intervention3 = new Intervention();
+        $intervention3
+            ->setDenomination('Complet intérieur/extérieur')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+            
+        $manager->persist($intervention3);
+
         $manager->flush();
     }
 

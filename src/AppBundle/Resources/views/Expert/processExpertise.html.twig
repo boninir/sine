@@ -49,7 +49,6 @@
                 <li role="presentation" class="col-md-2"><a href="#carosserie" role="tab" data-toggle="tab">Carrosserie</a></li>
                 <li role="presentation" class="col-md-2"><a href="#interieur" role="tab" data-toggle="tab">Intérieur</a></li>
                 <li role="presentation" class="col-md-2"><a href="#nettoyage" role="tab" data-toggle="tab">Nettoyage</a></li>
-                <li role="presentation" class="col-md-2"><a href="#photos" role="tab" data-toggle="tab">Photos</a></li>
             </ul>
         </div>
 
@@ -235,7 +234,6 @@
                                     <p><b>{{ interv.vars.data.denomination }}</b></p>
                                 </div>
                                 <div class="col-md-2">
-                                    {{ form_row(interv.select) }}
                                 </div>
 
                                 <div class="col-md-2">
@@ -272,26 +270,6 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane row" id="photos">
-                        <div class="collection-form">
-                            {{ form_row(formIntervention.pictures) }}
-                        </div>
-
-                        {% if pictures|length != 0 %}
-                            <hr>
-                            <div class="text-left">
-                                <h3>Liste des photos :</h3>
-
-                                {% for picture in pictures %}
-                                    <div class="text-center col-md-3">
-                                        <img src="{{ asset('vehicle-pictures/' ~ vehicle.id ~ '/' ~ picture.name) }}" width="100%">
-                                        <a href="{{ path('delete-picture', {id: picture.id}) }}" class="btn btn-danger">Supprimer</a>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
                     </div>
 
                     <br>
