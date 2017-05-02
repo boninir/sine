@@ -53,6 +53,7 @@ class VehicleInterventionController extends Controller
      */
     public function updateCommentAction(VehicleIntervention $intervention, Request $request)
     {
+        var_dump("toto");
         $intervention->setComment($request->request->get('comment'));
 
         $this->getDoctrine()
