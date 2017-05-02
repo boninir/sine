@@ -78,7 +78,7 @@ class ExpertController extends Controller
             return $this->redirectToRoute('expert');
         }
 
-        //this is a simple test of slackbot integration
+        // Oh dear, it work !
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(VehicleType::class, $vehicle);
