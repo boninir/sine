@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\VehicleIntervention;
+use AppBundle\Entity\Vehicle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,6 @@ class VehicleInterventionController extends Controller
     public function updateCommentAction(VehicleIntervention $intervention, Request $request)
     {
         $intervention->setComment($request->request->get('comment'));
-
         $this->getDoctrine()
             ->getManager()
             ->flush();

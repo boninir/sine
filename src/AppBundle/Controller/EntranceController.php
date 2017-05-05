@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
@@ -97,23 +96,7 @@ class EntranceController extends Controller
                     $em->persist($vehicleIntervention);
                 }
             }
-
-            foreach ($formIntervention->get('pictures')->getData() as $file) {
-                if ($file === null) {
-                    continue;
-                }
-
-                $picture = (new Picture())
-                    ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
-                    ->setVehicle($vehicle);
-                $em->persist($picture);
-
-                $file->move(
-                    sprintf('vehicle-pictures/%d', $vehicle->getId()),
-                    $picture->getName()
-                );
-            }
-
+            
             $interventionType = [];
 
             foreach ($vehicle->getInterventions() as $vehicleIntervention) {
@@ -157,15 +140,13 @@ class EntranceController extends Controller
             return $this->redirectToRoute('entrance');
         }
 
-        $pictures = $em->getRepository(Picture::class)
-            ->findByVehicle($vehicle);
+
 
         return [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
-            'pictures' => $pictures,
         ];
     }
 }

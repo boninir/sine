@@ -13,9 +13,30 @@ class LoadMechanicalInterventionData extends AbstractFixture implements OrderedF
     {
         $type = $this->getReference('mechanical');
 
+        $intervention11 = new Intervention();
+        $intervention11
+            ->setDenomination('Vidange - Huile')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention11);
+
+        $intervention12 = new Intervention();
+        $intervention12
+            ->setDenomination('Filtre - Carburant')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention12);
+
+        $intervention13 = new Intervention();
+        $intervention13
+            ->setDenomination('Filtre - Habitacle')
+            ->setTypeIntervention($type)
+            ->setRequired(1);
+        $manager->persist($intervention13);
+
         $intervention1 = new Intervention();
         $intervention1
-            ->setDenomination('Vidange - filtres')
+            ->setDenomination('Filtre - Air')
             ->setTypeIntervention($type)
             ->setRequired(1);
         $manager->persist($intervention1);
@@ -58,7 +79,7 @@ class LoadMechanicalInterventionData extends AbstractFixture implements OrderedF
 
         $intervention7 = new Intervention();
         $intervention7
-            ->setDenomination('Pneumatiques AV')
+            ->setDenomination('Pneumatiques AR')
             ->setTypeIntervention($type)
             ->setRequired(1);
         $manager->persist($intervention7);
@@ -77,33 +98,6 @@ class LoadMechanicalInterventionData extends AbstractFixture implements OrderedF
             ->setRequired(1);
         $manager->persist($intervention9);
 
-        $intervention10 = new Intervention();
-        $intervention10
-            ->setDenomination('Habitacle')
-            ->setTypeIntervention($type)
-            ->setRequired(1);
-        $manager->persist($intervention10);
-
-        $intervention11 = new Intervention();
-        $intervention11
-            ->setDenomination('Huile')
-            ->setTypeIntervention($type)
-            ->setRequired(1);
-        $manager->persist($intervention11);
-
-        $intervention12 = new Intervention();
-        $intervention12
-            ->setDenomination('Carburant')
-            ->setTypeIntervention($type)
-            ->setRequired(1);
-        $manager->persist($intervention12);
-
-        $intervention13 = new Intervention();
-        $intervention13
-            ->setDenomination('Air')
-            ->setTypeIntervention($type)
-            ->setRequired(1);
-        $manager->persist($intervention13);
 
         $manager->flush();
     }

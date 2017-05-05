@@ -62,7 +62,6 @@ framework:
                 - bodywork
                 - cosmetic
                 - cleaning
-                - photo
                 - validate
                 - finish
             transitions:
@@ -70,22 +69,19 @@ framework:
                     from: expert
                     to: control
                 to_mechanical:
-                    from: [control, bodywork, cosmetic, cleaning, photo]
+                    from: [control, bodywork, cosmetic, cleaning]
                     to: mechanical
                 to_bodywork:
-                    from: [control, mechanical, cosmetic, cleaning, photo]
+                    from: [control, mechanical, cosmetic, cleaning]
                     to: bodywork
                 to_cosmetic:
-                    from: [control, bodywork, mechanical, cleaning, photo]
+                    from: [control, bodywork, mechanical, cleaning]
                     to: cosmetic
                 to_cleaning:
-                    from: [control, bodywork, cosmetic, mechanical, photo]
+                    from: [control, bodywork, cosmetic, mechanical]
                     to: cleaning
-                to_photo:
-                    from: [control, bodywork, cosmetic, cleaning, mechanical]
-                    to: photo
                 validated:
-                    from: [mechanical, bodywork, cosmetic, cleaning, photo]
+                    from: [mechanical, bodywork, cosmetic, cleaning]
                     to: validate
                 terminated:
                     from: validate

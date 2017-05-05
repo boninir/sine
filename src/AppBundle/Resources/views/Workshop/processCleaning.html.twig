@@ -49,6 +49,15 @@
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     </a>
 
+                    <div id="addNewCom {{ intervention.id }}" style="display : inline">
+                        <!-- Permet affichage commentaire -->
+                        {% if intervention.comment!=null %}
+                            <i class="glyphicon glyphicon-comment" id="displayComment{{ intervention.id }}">
+                                {{ intervention.comment }}
+                            </i>
+                        {% endif %}
+                    </div>
+
                     <div class="modal fade text-left comment-modal" id="modal-{{ intervention.id }}" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -67,6 +76,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-md-1"></div>
             </div>
         {% endfor %}
@@ -76,17 +86,17 @@
 
 {% block javascripts %}
     {{ parent() }}
-
     <script type="text/javascript">
         $(document).ready(function() {
             $('.btn-group .btn').click(function() {
                 var interventionId = $(this).parent().data('id')
-                    state = $(this).data('state')
-                    that = this;
+                state = $(this).data('state')
+                that = this;
 
                 $.ajax({
-                    url: '/app_dev.php/vehicle-intervention/update-state/' + interventionId,
+                    url: 'http://localhost:8888/sineo/web/app_dev.php/vehicle-intervention/update-state/' + interventionId,
                     data: 'state=' + state,
+                    datatype: "text",
                     type: 'POST',
                     success: function(data) {
                         if (data == 'allDone') {
@@ -107,12 +117,31 @@
 
             $('.comment-modal .btn-success').click(function() {
                 var interventionId = $(this).closest('.comment-part').data('id'),
-                    comment = $(this).closest('.modal-content').find('textarea').val();
+                        comment = $(this).closest('.modal-content').find('textarea').val();
 
                 $.ajax({
-                    url: '/app_dev.php/vehicle-intervention/update-comment/' + interventionId,
+                    url: 'http://localhost:8888/sineo/web/app_dev.php/vehicle-intervention/update-comment/' + interventionId,
                     data: 'comment=' + comment,
-                    type: 'POST'
+                    type: 'POST',
+                    success: function(data){
+                        var divDisplayComment = document.getElementById("displayComment"+interventionId);
+                        if(comment==""){
+                            var glyphicon = document.getElementById("displayComment"+interventionId);
+                            glyphicon.parentNode.removeChild(glyphicon);
+                            return;
+                        }
+                        if(divDisplayComment==null){
+                            var place = document.getElementById("addNewCom "+interventionId);
+                            var nouveauCom = document.createElement('i');
+                            nouveauCom.setAttribute("class", "glyphicon-comment");
+                            nouveauCom.setAttribute("id", "displayComment"+interventionId);
+                            nouveauCom.innerHTML = "  "+comment;
+                            place.appendChild(nouveauCom);
+                        }
+                        else{
+                            document.getElementById("displayComment"+interventionId).innerHTML = "  "+comment;
+                        }
+                    }
                 });
             });
         });

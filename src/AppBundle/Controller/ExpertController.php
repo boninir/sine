@@ -25,7 +25,6 @@ class ExpertController extends Controller
         $vehicles = $this->getDoctrine()
             ->getRepository('AppBundle:Vehicle')
             ->findByState(Vehicle::STATE_EXPERT);
-
         return $this->render('AppBundle:Expert:expert.html.twig', array(
             'vehicles' => $vehicles,
         ));
@@ -140,24 +139,7 @@ class ExpertController extends Controller
                     $em->persist($vehicleIntervention);
                 }
             }
-
-            foreach ($formIntervention->get('pictures')->getData() as $file) {
-                if ($file === null) {
-                    continue;
-                }
-
-                $picture = (new Picture())
-                    ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
-                    ->setVehicle($vehicle);
-
-                $em->persist($picture);
-
-                $file->move(
-                    sprintf('vehicle-pictures/%d', $vehicle->getId()),
-                    $picture->getName()
-                );
-            }
-
+            
             $machine = $this->container->get('state_machine.vehicle');
             $machine->can($vehicle, 'expertised');
             $machine->apply($vehicle, 'expertised');
@@ -172,15 +154,13 @@ class ExpertController extends Controller
             return $this->redirectToRoute('expert');
         }
 
-        $pictures = $em->getRepository(Picture::class)
-            ->findByVehicle($vehicle);
+
 
         return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
-            'pictures' => $pictures,
         ));
     }
 }

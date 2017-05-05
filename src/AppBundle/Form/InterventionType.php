@@ -28,16 +28,13 @@ class InterventionType extends AbstractType
                         'mapped' => false,
                         'required' => false,
                     ]);
-
                     return;
                 }
-
 
                 $value = null;
                 foreach ($options['vehicle']->getInterventions() as $vehicleIntervention) {
                     if ($vehicleIntervention->getIntervention() === $intervention) {
                         $value = $vehicleIntervention;
-
                         break;
                     }
                 }
@@ -49,26 +46,52 @@ class InterventionType extends AbstractType
                     'data' => $value === null ? null : $value->getComment()
                 ]);
 
+
                 if (empty($intervention->getAnswers())) {
-                    $form->add('select', ChoiceType::class, [
-                        'choices' => [true],
-                        'label' => false,
-                        'choice_label' => false,
-                        'mapped' => false,
-                        'expanded' => true,
-                        'multiple' => true,
-                        'choice_attr' => function() {
-                            return [
-                                'class' => 'choose-intervention',
-                                'data-toggle' => 'toggle',
-                                'data-on' => 'Oui',
-                                'data-off' => 'Non',
-                                "data-onstyle" => "success",
-                                "data-offstyle" => "danger",
-                            ];
-                        },
-                        'data' => $value === null ? [] : $value->getAnswers(),
-                    ]);
+                    //On retrouve ici les boutons à précocher en fonction de leur dénomination
+                    if(($intervention->getDenomination()) == "Complet"){
+                        $form->add('select', ChoiceType::class, [
+                            'choices' =>[true],
+                            'label' => false,
+                            'choice_label' => false,
+                            'mapped' => false,
+                            'expanded' => true,
+                            'multiple' => true,
+                            'choice_attr' => function() {
+                                return [
+                                    'checked' => 'checked',
+                                    'class' => 'choose-intervention',
+                                    'data-toggle' => 'toggle',
+                                    'data-on' => 'Oui',
+                                    'data-off' => 'Non',
+                                    "data-onstyle" => "success",
+                                    "data-offstyle" => "danger",
+                                ];
+                            },
+                        ]);
+                    }
+                    else{
+                        $form->add('select', ChoiceType::class, [
+                            'choices' => [true],
+                            'label' => false,
+                            'choice_label' => false,
+                            'mapped' => false,
+                            'expanded' => true,
+                            'multiple' => true,
+                            'choice_attr' => function() {
+                                return [
+                                    'class' => 'choose-intervention',
+                                    'data-toggle' => 'toggle',
+                                    'data-on' => 'Oui',
+                                    'data-off' => 'Non',
+                                    "data-onstyle" => "success",
+                                    "data-offstyle" => "danger",
+                                ];
+                            },
+                            'data' => $value === null ? [] : $value->getAnswers(),
+                        ]);
+                    }
+
                 } else {
                     $form->add('select', ChoiceType::class, [
                         'choices' => $intervention->getAnswers(),

@@ -52,7 +52,21 @@
                                 <div class="col-md-5">- Essence : {{ vehicle.fuel.denomination }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7"></div>
+                                <div class="col-md-7">
+                                    <div class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            Envoyer vers autre atelier
+                                            <span class="caret"></span>
+                                        </button>
+                                        <!-- dropdown permettant changement atelier -->
+                                        <ul class="dropdown-menu">
+                                            {% for interv in transitions[vehicle.id] %}
+                                                {% set chemin = 'redirect-'~interv~'/'~vehicle.id %}
+                                                <li><a href="{{ chemin }}">{{ interv }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
                                 <div class="col-md-5">
                                     <a href="{{ path('process-mechanical', {'id': vehicle.id}) }}" class="btn btn-primary">
                                         Procéder aux interventions

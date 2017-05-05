@@ -20,9 +20,23 @@ class WorkshopController extends Controller
         $vehicles = $this->getDoctrine()
             ->getRepository(Vehicle::class)
             ->findByState('mechanical');
-
+        //On récupère les transitions afin de savoir de rediriger la voiture vers d'autres ateliers
+        //Exporter la méthode vers les Repository
+        $transitions = array();
+        foreach ($vehicles as $vehicle){
+            $intervVehicle = $vehicle->getInterventions();
+            $transVehicle = array();
+            foreach ($intervVehicle as $interv){
+                //On conserve les transitions vers les ateliers != atelier courant (ici mechanical)
+                if(str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition())!=$vehicle->getState()){
+                    array_push($transVehicle,str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition()));
+                }
+            }
+            $transitions[$vehicle->getId()] = array_unique($transVehicle);
+        }
         return $this->render('AppBundle:Workshop:mechanical.html.twig', array(
             'vehicles' => $vehicles,
+            'transitions' => $transitions,
         ));
     }
 
@@ -56,9 +70,22 @@ class WorkshopController extends Controller
         $vehicles = $this->getDoctrine()
             ->getRepository(Vehicle::class)
             ->findByState('bodywork');
-
+        //On récupère les transitions afin de savoir de rediriger la voiture vers d'autres ateliers
+        $transitions = array();
+        foreach ($vehicles as $vehicle){
+            $intervVehicle = $vehicle->getInterventions();
+            $transVehicle = array();
+            foreach ($intervVehicle as $interv){
+                //On conserve les transitions vers les ateliers != atelier courant
+                if(str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition())!=$vehicle->getState()){
+                    array_push($transVehicle,str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition()));
+                }
+            }
+            $transitions[$vehicle->getId()] = array_unique($transVehicle);
+        }
         return $this->render('AppBundle:Workshop:bodywork.html.twig', array(
             'vehicles' => $vehicles,
+            'transitions' => $transitions,
         ));
     }
 
@@ -92,9 +119,22 @@ class WorkshopController extends Controller
         $vehicles = $this->getDoctrine()
             ->getRepository(Vehicle::class)
             ->findByState('cosmetic');
-
+        //On récupère les transitions afin de savoir de rediriger la voiture vers d'autres ateliers
+        $transitions = array();
+        foreach ($vehicles as $vehicle){
+            $intervVehicle = $vehicle->getInterventions();
+            $transVehicle = array();
+            foreach ($intervVehicle as $interv){
+                //On conserve les transitions vers les ateliers != atelier courant
+                if(str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition())!=$vehicle->getState()){
+                    array_push($transVehicle,str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition()));
+                }
+            }
+            $transitions[$vehicle->getId()] = array_unique($transVehicle);
+        }
         return $this->render('AppBundle:Workshop:cosmetic.html.twig', array(
             'vehicles' => $vehicles,
+            'transitions' => $transitions,
         ));
     }
 
@@ -128,9 +168,22 @@ class WorkshopController extends Controller
         $vehicles = $this->getDoctrine()
             ->getRepository(Vehicle::class)
             ->findByState('cleaning');
-
+        //On récupère les transitions afin de savoir de rediriger la voiture vers d'autres ateliers
+        $transition = array();
+        foreach ($vehicles as $vehicle){
+            $intervVehicle = $vehicle->getInterventions();
+            $transVehicle = array();
+            foreach ($intervVehicle as $interv){
+                //On conserve les transitions vers les ateliers != atelier courant
+                if(str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition())!=$vehicle->getState()){
+                    array_push($transVehicle,str_replace("to_","",$interv->getIntervention()->getTypeIntervention()->getTransition()));
+                }
+            }
+            $transition[$vehicle->getId()] = array_unique($transVehicle);
+        }
         return $this->render('AppBundle:Workshop:cleaning.html.twig', array(
             'vehicles' => $vehicles,
+            'transitions' => $transition,
         ));
     }
 
@@ -155,32 +208,55 @@ class WorkshopController extends Controller
             'interventions' => $interventions,
         ]);
     }
-
     /**
-     * @Route("/photo", name="photo")
+     * @param Vehicle $vehicle
+     *
+     * @Route("/redirect-cosmetic/{id}", name="redirect-cosmetic")
      */
-    public function photoAction()
-    {
-        $vehicles = $this->getDoctrine()
-            ->getRepository(Vehicle::class)
-            ->findByState('photo');
-
-        return $this->render('AppBundle:Workshop:photo.html.twig', array(
-            'vehicles' => $vehicles,
-        ));
+    public function redirectCosmeticAction(Vehicle $vehicle){
+        $vehicle->setState("cosmetic");
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
+        return $this->redirectToRoute('cosmetic');
     }
 
     /**
-     * @Route("/process-photo/{id}", name="process-photo")
+     * @param Vehicle $vehicle
+     *
+     * @Route("/redirect-mechanical/{id}", name="redirect-mechanical")
      */
-    public function processPhotoAction(Vehicle $vehicle)
-    {
-        if ($vehicle->getState() !== 'photo') {
-            return $this->redirectToRoute('photo');
-        }
+    public function redirectMechanicalAction(Vehicle $vehicle){
+        $vehicle->setState("mechanical");
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
+        return $this->redirectToRoute('mechanical');
+    }
 
-        return $this->render('AppBundle:Workshop:processPhoto.html.twig', array(
-            'vehicle' => $vehicle,
-        ));
+    /**
+     * @param Vehicle $vehicle
+     *
+     * @Route("/redirect-bodywork/{id}", name="redirect-bodywork")
+     */
+    public function redirectBodyworkAction(Vehicle $vehicle){
+        $vehicle->setState("bodywork");
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
+        return $this->redirectToRoute('bodywork');
+    }
+
+    /**
+     * @param Vehicle $vehicle
+     *
+     * @Route("/redirect-cleaning/{id}", name="redirect-cleaning")
+     */
+    public function redirectCleaningAction(Vehicle $vehicle){
+        $vehicle->setState("cleaning");
+        $this->getDoctrine()
+            ->getManager()
+            ->flush();
+        return $this->redirectToRoute('cleaning');
     }
 }
