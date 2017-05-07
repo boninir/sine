@@ -17,7 +17,6 @@ body {
     background-color: #f5f5f5;
 }
 
-
 /* Custom page CSS
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
@@ -48,4 +47,9 @@ code {
     font-weight: bold;
     border: 1px solid #000;
     margin-top: 0;
+}
+
+.checkbox {
+    margin: 0;
+    display: inline-block;
 }

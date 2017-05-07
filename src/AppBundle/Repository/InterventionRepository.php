@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Vehicle;
+
 /**
  * InterventionRepository
  *
@@ -10,4 +12,17 @@ namespace AppBundle\Repository;
  */
 class InterventionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findForVehicle(Vehicle $vehicle)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.vehicleInterventions', 'vi')
+            ->where('i.required = :required')
+            ->orWhere('vi.vehicle = :vehicle')
+            ->setParameter('required', true)
+            ->setParameter('vehicle', $vehicle)
+            ->orderBy('i.id')
+            ->getQuery()
+            ->execute()
+        ;
+    }
 }

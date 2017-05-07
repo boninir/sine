@@ -8,6 +8,7 @@ use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
+use Doctrine\ORM\UnitOfWork;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,7 +78,6 @@ class ExpertiseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $vehicle = $form->getData();
 
             $em->persist($vehicle);
@@ -112,11 +112,18 @@ class ExpertiseController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
+                    $intervention = $interventionToSave->getData();
+
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($interventionToSave->getData())
+                        ->addIntervention($intervention)
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
+                        ->setTime(
+                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
+                            ? $interventionToSave['time']->getData()
+                            : null
+                        )
                     ;
 
                     $em->persist($vehicleIntervention);

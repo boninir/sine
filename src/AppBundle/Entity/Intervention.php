@@ -55,6 +55,12 @@ class Intervention
      */
     private $answers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehicleIntervention", mappedBy="intervention")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $vehicleInterventions;
+
 
     public function __construct()
     {

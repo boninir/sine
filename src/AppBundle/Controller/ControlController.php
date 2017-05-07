@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
@@ -25,8 +26,8 @@ class ControlController extends Controller
 
         $form = $this->createForm(VehicleType::class, $vehicle);
         $interventions = $this->getDoctrine()
-            ->getRepository('AppBundle:Intervention')
-            ->findBy(array('required' => 1));
+            ->getRepository(Intervention::class)
+            ->findForVehicle($vehicle);
 
         $formIntervention = $this->createForm(
             ExpertiseType::class,
