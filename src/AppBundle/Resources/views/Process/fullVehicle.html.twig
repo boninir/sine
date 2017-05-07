@@ -64,25 +64,23 @@
                         <hr>
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Mécanique' %}
                             <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
-                                <br>
-                                <div class="col-md-3"></div>
+                                <div class="col-md-2"></div>
                                 <div class="col-md-2 text-right">
                                     <p>
                                         <b>{{ interv.vars.data.denomination }}</b>
-                                        {{ form_row(interv.time) }}
                                     </p>
                                 </div>
                                 <div class="col-md-2">
                                     {{ form_row(interv.select) }}
                                 </div>
 
-                                <div class="col-md-2">
-                                    <a class="btn btn-warning set-comment" data-target="#modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                <div class="col-md-2 comment-part">
+                                    <a class="btn btn-warning set-comment" data-target="#comment-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
                                         <span class="content">Ajouter un commentaire</span>
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </a>
 
-                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                    <div class="modal fade text-left comment-modal" id="comment-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -93,18 +91,34 @@
                                                     {{ form_row(interv.comment) }}
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Retour</button>
                                                     <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 text-left">
-                                    <div class="comment">
-                                        {% if interv.comment.vars.data != null %}
-                                            {{ interv.comment.vars.data }}
-                                        {% endif %}
+
+                                <div class="col-md-2 time-part">
+                                    <a class="btn btn-primary set-time" data-target="#time-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                        <span class="content">Forcer le temps</span>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </a>
+
+                                    <div class="modal fade text-left time-modal" id="time-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">{{ form_label(interv.time) }}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ form_widget(interv.time) }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +154,6 @@
                                 <div>
                                     <p>
                                         <b>{{ interv.vars.data.denomination }}</b>
-                                        {{ form_row(interv.time) }}
                                     </p>
                                 </div>
                                 <br>
@@ -155,35 +168,54 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                <br>
                                 <div>
-                                    <a class="btn btn-warning set-comment" data-target="#modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
-                                        <span class="content">Ajouter un commentaire</span>
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </a>
+                                    <span class="comment-part">
+                                        <a class="btn btn-warning set-comment" data-target="#comment-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                            <span class="content">Ajouter un commentaire</span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
 
-                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">Commentaire</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{ form_row(interv.comment) }}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Retour</button>
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                        <div class="modal fade text-left comment-modal" id="comment-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">Commentaire</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ form_row(interv.comment) }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="comment">
-                                    {% if interv.comment.vars.data != null %}
-                                        {{ interv.comment.vars.data }}
-                                    {% endif %}
+                                    </span>
+
+                                    <span class="time-part">
+                                        <a class="btn btn-primary set-time" data-target="#time-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                            <span class="content">Forcer le temps</span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
+
+                                        <div class="modal fade text-left time-modal" id="time-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">{{ form_label(interv.time) }}</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ form_widget(interv.time) }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
                                 </div>
                             </div>
                             {% if loop.index is odd %}
@@ -223,7 +255,6 @@
                                 <div>
                                     <p>
                                         <b>{{ interv.vars.data.denomination }}</b>
-                                        {{ form_row(interv.time) }}
                                     </p>
                                 </div>
                                 <br>
@@ -238,35 +269,54 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %}
-                                <br>
                                 <div>
-                                    <a class="btn btn-warning set-comment" data-target="#modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
-                                        <span class="content">Ajouter un commentaire</span>
-                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                    </a>
+                                    <span class="comment-part">
+                                        <a class="btn btn-warning set-comment" data-target="#comment-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                            <span class="content">Ajouter un commentaire</span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
 
-                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">Commentaire</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    {{ form_row(interv.comment) }}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Retour</button>
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                        <div class="modal fade text-left comment-modal" id="comment-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">Commentaire</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ form_row(interv.comment) }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="comment">
-                                    {% if interv.comment.vars.data != null %}
-                                        {{ interv.comment.vars.data }}
-                                    {% endif %}
+                                    </span>
+
+                                    <span class="comment-part">
+                                        <a class="btn btn-primary set-time" data-target="#time-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                            <span class="content">Forcer le temps</span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </a>
+
+                                        <div class="modal fade text-left time-modal" id="time-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">{{ form_label(interv.time) }}</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{ form_widget(interv.time) }}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </span>
                                 </div>
                             </div>
                             {% if loop.index is odd %}
@@ -298,25 +348,23 @@
                         <hr>
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Nettoyage' %}
                             <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
-                                <br>
-                                <div class="col-md-3"></div>
+                                <div class="col-md-2"></div>
                                 <div class="col-md-2 text-right">
                                     <p>
                                         <b>{{ interv.vars.data.denomination }}</b>
-                                        {{ form_row(interv.time) }}
                                     </p>
                                 </div>
                                 <div class="col-md-2">
                                     {{ form_row(interv.select) }}
                                 </div>
 
-                                <div class="col-md-2">
-                                    <a class="btn btn-warning set-comment" data-target="#modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                <div class="col-md-2 comment-part">
+                                    <a class="btn btn-warning set-comment" data-target="#comment-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
                                         <span class="content">Ajouter un commentaire</span>
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                     </a>
 
-                                    <div class="modal fade text-left comment-modal" id="modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                    <div class="modal fade text-left comment-modal" id="comment-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -327,18 +375,34 @@
                                                     {{ form_row(interv.comment) }}
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Retour</button>
                                                     <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3 text-left">
-                                    <div class="comment">
-                                        {% if interv.comment.vars.data != null %}
-                                            {{ interv.comment.vars.data }}
-                                        {% endif %}
+
+                                <div class="col-md-2 time-part">
+                                    <a class="btn btn-primary set-time" data-target="#time-modal-{{ interv.vars.data.id }}" {% if interv.select.vars.data is empty %}disabled="disabled"{% else %}data-toggle="modal"{% endif %}>
+                                        <span class="content">Forcer le temps</span>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    </a>
+
+                                    <div class="modal fade text-left time-modal" id="time-modal-{{ interv.vars.data.id }}" tabindex="-1" role="dialog">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">{{ form_label(interv.time) }}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ form_widget(interv.time) }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Confirmer</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -427,6 +491,11 @@
         // Focus du textarea de commentaire sur la modal de commentaire
         $('.comment-modal').on('shown.bs.modal', function () {
             $('textarea', this).focus();
+        });
+
+        // Focus de l'input de temps sur la modal de temps
+        $('.time-modal').on('shown.bs.modal', function () {
+            $('input', this).focus();
         });
     </script>
 
@@ -548,18 +617,20 @@
         $(document).ready(function() {
             // Affichage du commentaire si une checkbox Oui/Non est checked
             $('.choose-intervention').change(function(e) {
-                var row = $(this).closest('.row'),
-                    comment = $(row).find('textarea').val()
-                ;
+                var row = $(this).closest('.row');
 
                 if ($(this).is(':checked')) {
-                    $(row).find('.comment').html(comment);
                     $(row).find('.set-comment').attr('disabled', false);
                     $(row).find('.set-comment').attr('data-toggle', 'modal');
+
+                    $(row).find('.set-time').attr('disabled', false);
+                    $(row).find('.set-time').attr('data-toggle', 'modal');
                 } else {
-                    $(row).find('.comment').html('');
                     $(row).find('.set-comment').attr('disabled', true);
                     $(row).find('.set-comment').removeAttr('data-toggle');
+
+                    $(row).find('.set-time').attr('disabled', true);
+                    $(row).find('.set-time').removeAttr('data-toggle');
                 }
             });
 
@@ -567,7 +638,6 @@
             $('.choices :checkbox').change(function() {
                 var row = $(this).closest('.row'),
                     choices = $(row).find(':checkbox'),
-                    comment = $(row).find('textarea').val(),
                     commentEnable = false
                 ;
 
@@ -580,28 +650,44 @@
                 });
 
                 if (commentEnable) {
-                    $(row).find('.comment').html(comment);
                     $(row).find('.set-comment').attr('disabled', false);
                     $(row).find('.set-comment').attr('data-toggle', 'modal');
+
+                    $(row).find('.set-time').attr('disabled', false);
+                    $(row).find('.set-time').attr('data-toggle', 'modal');
                 } else {
-                    $(row).find('.comment').html('');
                     $(row).find('.set-comment').attr('disabled', true);
                     $(row).find('.set-comment').removeAttr('data-toggle');
+
+                    $(row).find('.set-time').attr('disabled', true);
+                    $(row).find('.set-time').removeAttr('data-toggle');
                 }
             });
 
             // Modifie la valeur du bouton de commentaire en fonction de la présence d'un commentaire
-            $('.comment-modal button').click(function() {
+            $('.comment-modal').on('hide.bs.modal', function() {
                 var row = $(this).closest('.row'),
-                    comment = $(row).find('textarea').val()
+                    comment = $(row).find('.comment-part textarea').val()
                 ;
-
-                $(row).find('.comment').html(comment);
+                console.log($(row).find('.comment-part textarea'));
 
                 if (comment != '') {
                     $(row).find('.set-comment .content').html('Modifier le commentaire');
                 } else {
                     $(row).find('.set-comment .content').html('Ajouter un commentaire');
+                }
+            });
+
+            // Modifie la valeur du bouton de temps en fonction de la présence d'un temps
+            $('.time-modal').on('hide.bs.modal', function() {
+                var row = $(this).closest('.row'),
+                    time = $(row).find('.time-part input').val()
+                ;
+
+                if (time != '') {
+                    $(row).find('.set-time .content').html('Modifier le temps');
+                } else {
+                    $(row).find('.set-time .content').html('Forcer le temps');
                 }
             });
         });

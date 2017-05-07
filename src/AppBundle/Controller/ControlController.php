@@ -24,7 +24,9 @@ class ControlController extends Controller
             return $this->redirectToRoute('process', ['type' => 'control']);
         }
 
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(VehicleType::class, $vehicle);
+
         $interventions = $this->getDoctrine()
             ->getRepository(Intervention::class)
             ->findForVehicle($vehicle);
@@ -34,21 +36,12 @@ class ControlController extends Controller
             ['interventions' => $interventions],
             ['vehicle' => $vehicle]
         );
-        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicle = $form->getData();
-
-            $em->persist($vehicle);
             $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Les informations ont bien été mises à jour.'
-            );
+            $this->addFlash('notice', 'Les informations ont bien été mises à jour.');
 
             return $this->redirectToRoute('process-vehicle-control', ['id' => $vehicle->getId()]);
         }
@@ -56,8 +49,8 @@ class ControlController extends Controller
         $formIntervention->handleRequest($request);
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
-
             $interventionsToSave = $formIntervention->get('interventions');
+
             foreach ($interventionsToSave as $interventionToSave) {
                 $vehicleIntervention = $em
                     ->getRepository(VehicleIntervention::class)
@@ -79,6 +72,7 @@ class ControlController extends Controller
                         ->addIntervention($interventionToSave->getData())
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
+                        ->setTime($interventionToSave['time']->getData())
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -93,6 +87,7 @@ class ControlController extends Controller
                 $picture = (new Picture())
                     ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
                     ->setVehicle($vehicle);
+
                 $em->persist($picture);
 
                 $file->move(
@@ -135,11 +130,7 @@ class ControlController extends Controller
             $machine->apply($vehicle, $typeToLaunch->getTransition());
 
             $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Le contrôle à bien été enregistré.'
-            );
+            $this->addFlash('notice', 'Le contrôle à bien été enregistré.');
 
             return $this->redirectToRoute('process', ['type' => 'control']);
         }

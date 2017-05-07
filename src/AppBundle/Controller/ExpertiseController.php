@@ -62,7 +62,6 @@ class ExpertiseController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(VehicleType::class, $vehicle);
 
         $interventions = $this->getDoctrine()
@@ -78,15 +77,8 @@ class ExpertiseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $vehicle = $form->getData();
-
-            $em->persist($vehicle);
             $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'Les informations ont bien été mises à jour.'
-            );
+            $this->addFlash('notice', 'Les informations ont bien été mises à jour.');
 
             return $this->redirectToRoute('process-vehicle-expertise', ['id' => $vehicle->getId()]);
         }
@@ -94,11 +86,11 @@ class ExpertiseController extends Controller
         $formIntervention->handleRequest($request);
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
-
             $interventionsToSave = $formIntervention->get('interventions');
 
             foreach ($interventionsToSave as $interventionToSave) {
-                $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
+                $vehicleIntervention = $em
+                    ->getRepository(VehicleIntervention::class)
                     ->findOneBy([
                         'vehicle' => $vehicle,
                         'intervention' => $interventionToSave->getData()
@@ -112,18 +104,12 @@ class ExpertiseController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
-                    $intervention = $interventionToSave->getData();
-
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($intervention)
+                        ->addIntervention($interventionToSave->getData())
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
-                        ->setTime(
-                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
-                            ? $interventionToSave['time']->getData()
-                            : null
-                        )
+                        ->setTime($interventionToSave['time']->getData())
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -152,11 +138,7 @@ class ExpertiseController extends Controller
             $machine->apply($vehicle, 'expertised');
 
             $em->flush();
-
-            $this->addFlash(
-                'notice',
-                'L\'expertise à bien été enregistrée.'
-            );
+            $this->addFlash('notice', "L'expertise à bien été enregistrée.");
 
             return $this->redirectToRoute('process', ['type' => 'expertise']);
         }

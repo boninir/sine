@@ -56,6 +56,7 @@ class InterventionType extends AbstractType
                         ->add('time', NumberType::class, [
                             'label' => 'Temps à passer (en minutes)',
                             'mapped' => false,
+                            'required' => false,
                         ])
                         ->add('select', HiddenType::class, [
                             'mapped' => false,
@@ -80,11 +81,13 @@ class InterventionType extends AbstractType
                         'label' => false,
                         'mapped' => false,
                         'required' => false,
-                        'data' => $value === null ? null : $value->getComment()
+                        'data' => $value === null ? null : $value->getComment(),
                     ])
-                    ->add('time', HiddenType::class, [
+                    ->add('time', NumberType::class, [
                         'label' => 'Temps à passer (en minutes)',
-                        'mapped' => false
+                        'mapped' => false,
+                        'required' => false,
+                        'data' => $value === null ? null : $value->getTime(),
                     ])
                 ;
 
@@ -170,6 +173,4 @@ class InterventionType extends AbstractType
     {
         return 'appbundle_intervention';
     }
-
-
 }
