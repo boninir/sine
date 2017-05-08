@@ -169,6 +169,9 @@ class ExpertController extends Controller
                 'L\'expertise à bien été enregistrée.'
             );
 
+            $logger = $this->get('logger');
+            $logger->info('I just got the logger');
+
             return $this->redirectToRoute('expert');
         }
 

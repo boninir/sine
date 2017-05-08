@@ -32,6 +32,6 @@ class LoadCleaningInterventionData extends AbstractFixture implements OrderedFix
 
     public function getOrder()
     {
-        return 3;
+        return 6;
     }
 }

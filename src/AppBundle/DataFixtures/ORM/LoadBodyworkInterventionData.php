@@ -292,6 +292,6 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
 
     public function getOrder()
     {
-        return 3;
+        return 4;
     }
 }
