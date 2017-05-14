@@ -22,7 +22,7 @@ class PhotoType extends AbstractType
                 'allow_delete'  => true,
                 'attr'          => ['data-add-label' => 'Ajouter une photo'],
                 'entry_options' => ['label' => false],
-                'required'      => false,
+                'required'      => true,
             ])
         ;
     }
