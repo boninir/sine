@@ -62,3 +62,7 @@ code {
     padding-top: 20px;
     padding-bottom: 20px;
 }
+
+.form-control-feedback {
+    line-height: initial;
+}
