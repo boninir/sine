@@ -13,7 +13,7 @@ class VehicleInterventionController extends Controller
     /**
      * @param VehicleIntervention $intervention
      *
-     * @Route("/vehicle-intervention/update-state/{id}", name="update_vehicle_intervention_state")
+     * @Route("/vehicle-intervention/update-state/{id}", name="update_vehicle_intervention_state", options={"expose"=true})
      */
     public function updateStateAction(VehicleIntervention $intervention, Request $request)
     {
@@ -54,7 +54,7 @@ class VehicleInterventionController extends Controller
     /**
      * @param VehicleIntervention $intervention
      *
-     * @Route("/vehicle-intervention/update-comment/{id}", name="update_vehicle_intervention_comment")
+     * @Route("/vehicle-intervention/update-comment/{id}", name="update_vehicle_intervention_comment", options={"expose"=true})
      */
     public function updateCommentAction(VehicleIntervention $intervention, Request $request)
     {

@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Vehicle;
+
 /**
  * VehicleInterventionRepository
  *
@@ -10,13 +12,15 @@ namespace AppBundle\Repository;
  */
 class VehicleInterventionRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByTypeInterventionTransition($transition)
+    public function findByTypeInterventionTransitionAndVehicle($transition, Vehicle $vehicle)
     {
         return $this->createQueryBuilder('vi')
             ->join('vi.intervention', 'i')
             ->join('i.typeIntervention', 't')
             ->where('t.transition = :transition')
+            ->andWhere('vi.vehicle = :vehicle')
             ->setParameter('transition', $transition)
+            ->setParameter('vehicle', $vehicle)
             ->getQuery()
             ->execute()
         ;

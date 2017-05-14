@@ -155,7 +155,11 @@ class ProcessController extends Controller
 
         $interventions = $this->getDoctrine()
             ->getRepository(VehicleIntervention::class)
-            ->findByTypeInterventionTransition('to_' . $type);
+            ->findByTypeInterventionTransitionAndVehicle(
+                'to_' . $type,
+                $vehicle
+            )
+        ;
 
         return $this->render('AppBundle:Process:vehicle.html.twig', [
             'type' => $type,
