@@ -43,16 +43,15 @@
 
         <div class="row text-center center-block">
             <ul class="nav nav-pills" role="tablist">
-                <li class="col-md-1"></li>
-                <li role="presentation" class="active col-md-2"><a href="#mecanique" role="tab" data-toggle="tab">Mécanique</a></li>
+                <li role="presentation" class="active col-md-2 col-md-offset-2"><a href="#mecanique" role="tab" data-toggle="tab">Mécanique</a></li>
                 <li role="presentation" class="col-md-2"><a href="#carosserie" role="tab" data-toggle="tab">Carrosserie</a></li>
                 <li role="presentation" class="col-md-2"><a href="#interieur" role="tab" data-toggle="tab">Intérieur</a></li>
                 <li role="presentation" class="col-md-2"><a href="#nettoyage" role="tab" data-toggle="tab">Nettoyage</a></li>
-                <li role="presentation" class="col-md-2"><a href="#photos" role="tab" data-toggle="tab">Photos</a></li>
             </ul>
         </div>
 
         <div class="row">
+            {% set typeId = 0 %}
             {% form_theme formIntervention 'AppBundle:form:fields.html.twig' %}
             {{ form_start(formIntervention) }}
                 {% set prototype = form_row(formIntervention.interventions.vars.prototype) %}
@@ -62,6 +61,7 @@
                     <div role="tabpanel" class="tab-pane active row" id="mecanique">
                         <hr>
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Mécanique' %}
+                            {% set typeId = interv.vars.data.typeIntervention.id %}
                             <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
                                 <br>
                                 <div class="col-md-3"></div>
@@ -105,7 +105,7 @@
                         <div class="additionnal-intervention row">
                             <div
                                 class="col-md-6 col-md-offset-3"
-                                data-type-id="1"
+                                data-type-id="{{ typeId }}"
                                 data-label="Intervention supplémentaire"
                                 data-prototype='{{ prototype }}'>
                                 <hr>
@@ -122,6 +122,7 @@
 
                     <div role="tabpanel" class="tab-pane row" id="carosserie">
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Carrosserie' %}
+                            {% set typeId = interv.vars.data.typeIntervention.id %}
                             {% if loop.index is even %}
                                 <div class="row">
                             {% else %}
@@ -183,7 +184,7 @@
                         <div class="additionnal-intervention row">
                             <div
                                 class="col-md-6 col-md-offset-3"
-                                data-type-id="2"
+                                data-type-id="{{ typeId }}"
                                 data-label="Intervention supplémentaire"
                                 data-prototype='{{ prototype }}'>
                                 <hr>
@@ -200,6 +201,7 @@
 
                     <div role="tabpanel" class="tab-pane row" id="interieur">
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Intérieur' %}
+                            {% set typeId = interv.vars.data.typeIntervention.id %}
                             {% if loop.index is even %}
                                 <div class="row">
                             {% else %}
@@ -261,7 +263,7 @@
                         <div class="additionnal-intervention row">
                             <div
                                 class="col-md-6 col-md-offset-3"
-                                data-type-id="3"
+                                data-type-id="{{ typeId }}"
                                 data-label="Intervention supplémentaire"
                                 data-prototype='{{ prototype }}'>
                                 <hr>
@@ -279,6 +281,7 @@
                     <div role="tabpanel" class="tab-pane row" id="nettoyage">
                         <hr>
                         {% for interv in formIntervention.interventions if interv.vars.data.typeIntervention.denomination == 'Nettoyage' %}
+                            {% set typeId = interv.vars.data.typeIntervention.id %}
                             <div class="row" data-intervention-id="{{ interv.vars.data.id }}">
                                 <br>
                                 <div class="col-md-3"></div>
@@ -322,7 +325,7 @@
                         <div class="additionnal-intervention row">
                             <div
                                 class="col-md-6 col-md-offset-3"
-                                data-type-id="4"
+                                data-type-id="{{ typeId }}"
                                 data-label="Intervention supplémentaire"
                                 data-prototype='{{ prototype }}'>
                                 <hr>
@@ -335,26 +338,6 @@
                             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>
                             </a>
                         </div>
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane row" id="photos">
-                        <div class="collection-form">
-                            {{ form_row(formIntervention.pictures) }}
-                        </div>
-
-                        {% if pictures|length != 0 %}
-                            <hr>
-                            <div class="text-left">
-                                <h3>Liste des photos :</h3>
-
-                                {% for picture in pictures %}
-                                    <div class="text-center col-md-3">
-                                        <img src="{{ asset('vehicle-pictures/' ~ vehicle.id ~ '/' ~ picture.name) }}" width="100%">
-                                        {# A remplacer par un appel Ajax : <a href="{{ path('delete-picture', {id: picture.id}) }}" class="btn btn-danger">Supprimer</a> #}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
                     </div>
 
                     <br>
@@ -401,53 +384,6 @@
         // Focus du textarea de commentaire sur la modal de commentaire
         $('.comment-modal').on('shown.bs.modal', function () {
             $('textarea', this).focus();
-        });
-    </script>
-
-    <script type="text/javascript">
-        // Ajout à la volée de photo
-        $(document).ready(function() {
-            var $container = $('#appbundle_expertise_pictures'),
-                index = 0,
-                $addLink = $(
-                    '<a href="#" class="btn btn-warning">'
-                    + $container.data('add-label')
-                    + ' <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"/>'
-                    +'</a>'
-                )
-            ;
-            if (index == 0) {
-                add($container);
-            } else {
-                $container.children('div').each(function() {
-                    addDeleteLink($(this));
-                });
-            }
-            $container.parent().append($addLink);
-            $addLink.click(function(e) {
-                add($container);
-                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-                return false;
-            });
-            function add($container) {
-                var $prototype = $($container.data('prototype').replace(/__name__/g, index));
-                $prototype
-                    .addClass('text-left row')
-                    .find('input').addClass('col-md-6')
-                ;
-                ++ index;
-                addDeleteLink($prototype);
-                $container.append($prototype);
-            }
-            function addDeleteLink($prototype) {
-                $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
-                $prototype.append($deleteLink);
-                $deleteLink.click(function(e) {
-                    $prototype.remove();
-                    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-                    return false;
-                });
-            }
         });
     </script>
 

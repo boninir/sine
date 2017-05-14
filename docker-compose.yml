@@ -16,6 +16,7 @@ services:
         volumes:
             - ./:/var/www/html/
             - ./docker-config/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+            - ~/.composer/:/var/www/.composer
 
     nginx:
         image: nginx
