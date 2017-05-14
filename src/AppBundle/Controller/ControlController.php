@@ -8,6 +8,7 @@ use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
+use Doctrine\ORM\UnitOfWork;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

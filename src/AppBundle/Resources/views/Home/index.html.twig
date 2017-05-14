@@ -40,7 +40,7 @@
             </div>
             <div class="panel-body">
                 <div class="progress">
-                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%">
                         <span class="sr-only"></span>
                     </div>
                 </div>
@@ -194,32 +194,23 @@
                 </div>
                 <br>
 
-                {% for intervention in vehicle.interventions if intervention.intervention.typeIntervention.denomination == 'Photos' %}
-
-                    {% set class = '' %}
-                    {% set icon = '' %}
-
-                    {% if intervention.state == 'toStart' %}
-                        {% set class = 'has-error' %}
-                        {% set icon = 'remove' %}
-                    {% elseif intervention.state == 'inProgress' %}
-                        {% set class = 'has-warning' %}
-                        {% set icon = 'repeat' %}
-                    {% else %}
-                        {% set class = 'has-success' %}
-                        {% set icon = 'ok' %}
-                    {% endif %}
-
-                    <div class="row {{ class }} has-feedback">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-5">{{ intervention.intervention.denomination }}</div>
-                        <div class="col-md-5">
-                            {{ intervention.state|trans }}
-                            <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
-                        </div>
+                {% if vehicle.pictures is not empty %}
+                    {% set class = 'has-success' %}
+                    {% set icon = 'ok' %}
+                    {% set text = 'terminé' %}
+                {% else %}
+                    {% set class = 'has-error' %}
+                    {% set icon = 'remove' %}
+                    {% set text = 'à lancer' %}
+                {% endif %}
+                <div class="row {{ class }} has-feedback">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">Faire les photos du véhicule</div>
+                    <div class="col-md-5">
+                        {{ text }}
+                        <span class="glyphicon glyphicon-{{ icon }} form-control-feedback" aria-hidden="true"></span>
                     </div>
-                {% endfor %}
-
+                </div>
 
             </div>
         </div>

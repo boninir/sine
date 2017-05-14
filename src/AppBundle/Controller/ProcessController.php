@@ -11,6 +11,7 @@ use AppBundle\Form\PhotoType;
 use AppBundle\Form\ValidationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 class ProcessController extends Controller
@@ -48,7 +49,9 @@ class ProcessController extends Controller
         $form = $this->createForm(PhotoType::class);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && empty($form->get('pictures')->getData())) {
+            $form->addError(new FormError('Il faut ajouter au moins une photo au véhicule'));
+        } elseif ($form->isValid()) {
             foreach ($form->get('pictures')->getData() as $file) {
                 if ($file === null) {
                     continue;
