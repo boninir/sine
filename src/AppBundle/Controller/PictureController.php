@@ -11,7 +11,7 @@ class PictureController extends Controller
     /**
      * @Route(path="/delete-picture/{id}", name="delete-picture")
      */
-    public function registerAction(Picture $picture)
+    public function deleteAction(Picture $picture)
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($picture);

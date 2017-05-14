@@ -53,3 +53,12 @@ code {
     margin: 0;
     display: inline-block;
 }
+
+.intervention {
+    padding-bottom: 40px;
+}
+
+#photo img {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

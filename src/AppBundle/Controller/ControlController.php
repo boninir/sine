@@ -67,12 +67,18 @@ class ControlController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
+                    $intervention = $interventionToSave->getData();
+
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($interventionToSave->getData())
+                        ->addIntervention($intervention)
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
-                        ->setTime($interventionToSave['time']->getData())
+                        ->setTime(
+                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
+                            ? $interventionToSave['time']->getData()
+                            : null
+                        )
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -144,6 +150,7 @@ class ControlController extends Controller
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
             'pictures' => $pictures,
+            'type' => 'control',
         ]);
     }
 }
