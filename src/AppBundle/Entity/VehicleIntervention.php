@@ -87,7 +87,7 @@ class VehicleIntervention
     private $vehicle;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Intervention")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Intervention", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $intervention;

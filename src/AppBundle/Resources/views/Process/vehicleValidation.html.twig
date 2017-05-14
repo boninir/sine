@@ -1,0 +1,110 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block core %}
+    <div class="text-center">
+        <div class="row text-center center-block">
+            <ul class="nav nav-pills" role="tablist">
+                <li role="presentation" class="active col-md-2 col-md-offset-1"><a href="#mechanical" role="tab" data-toggle="tab">Mécanique</a></li>
+                <li role="presentation" class="col-md-2"><a href="#bodywork" role="tab" data-toggle="tab">Carrosserie</a></li>
+                <li role="presentation" class="col-md-2"><a href="#cosmetic" role="tab" data-toggle="tab">Intérieur</a></li>
+                <li role="presentation" class="col-md-2"><a href="#cleaning" role="tab" data-toggle="tab">Nettoyage</a></li>
+                <li role="presentation" class="col-md-2"><a href="#photo" role="tab" data-toggle="tab">Photos</a></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            {% form_theme form 'AppBundle:form:fields.html.twig' %}
+            {{ form_start(form) }}
+                <div class="tab-content text-center">
+                    <div role="tabpanel" class="tab-pane active row" id="mechanical">
+                        {% for vehicleIntervention in form.vehicleInterventions if vehicleIntervention.vars.data.intervention.typeIntervention.denomination == 'Mécanique' %}
+                            <div class="intervention row col-md-5 {% if loop.index is even %}col-md-offset-2{% endif %}">
+                                <div class="row"><h4>{{ vehicleIntervention.vars.data.intervention.denomination }}</h4></div>
+
+                                <div class="row text-left">
+                                    <div>{{ form_label(vehicleIntervention.comment) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.comment) }}</div>
+                                </div>
+
+                                <div class="row text-left">
+                                    <div>{{ form_label(vehicleIntervention.time) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.time) }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane row" id="bodywork">
+                        {% for vehicleIntervention in form.vehicleInterventions if vehicleIntervention.vars.data.intervention.typeIntervention.denomination == 'Carrosserie' %}
+                            <div class="intervention row col-md-5 {% if loop.index is even %}col-md-offset-2{% endif %}">
+                                <div><h4>{{ vehicleIntervention.vars.data.intervention.denomination }}</h4></div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.comment) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.comment) }}</div>
+                                </div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.time) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.time) }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane row" id="cosmetic">
+                        {% for vehicleIntervention in form.vehicleInterventions if vehicleIntervention.vars.data.intervention.typeIntervention.denomination == 'Intérieur' %}
+                            <div class="intervention row col-md-5 {% if loop.index is even %}col-md-offset-2{% endif %}">
+                                <div><h4>{{ vehicleIntervention.vars.data.intervention.denomination }}</h4></div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.comment) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.comment) }}</div>
+                                </div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.time) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.time) }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane row" id="cleaning">
+                        {% for vehicleIntervention in form.vehicleInterventions if vehicleIntervention.vars.data.intervention.typeIntervention.denomination == 'Nettoyage' %}
+                            <div class="intervention row col-md-5 {% if loop.index is even %}col-md-offset-2{% endif %}">
+                                <div><h4>{{ vehicleIntervention.vars.data.intervention.denomination }}</h4></div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.comment) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.comment) }}</div>
+                                </div>
+
+                                <div class="text-left">
+                                    <div>{{ form_label(vehicleIntervention.time) }}</div>
+                                    <div>{{ form_widget(vehicleIntervention.time) }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane row" id="photo">
+                        <h3>Liste des photos :</h3>
+
+                        {% for picture in pictures %}
+                            <div class="text-center col-md-4 col-md-offset-1">
+                                <a href="{{ asset('vehicle-pictures/' ~ vehicle.id ~ '/' ~ picture.name) }}" target="_blank">
+                                    <img src="{{ asset('vehicle-pictures/' ~ vehicle.id ~ '/' ~ picture.name) }}" width="100%">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <input type="submit" value="Enregistrer" class="btn btn-success" />
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

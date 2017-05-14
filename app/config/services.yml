@@ -5,6 +5,12 @@ services:
         tags:
             - { name: form.type }
 
+    form.intervention:
+        class: AppBundle\Form\InterventionType
+        arguments: [ '@doctrine' ]
+        tags:
+            - { name: form.type }
+
     form.admin.update_user:
         class: AppBundle\Form\UpdateUserType
         arguments: [ '@security.password_encoder' ]

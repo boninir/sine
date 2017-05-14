@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: workflow.yml }
 
 parameters:
     locale: fr
@@ -29,67 +30,6 @@ framework:
     assets: ~
     php_errors:
         log: true
-    workflows:
-        intervention:
-            type: 'state_machine'
-            marking_store:
-                type: 'single_state'
-                arguments: ['state']
-            supports:
-                - AppBundle\Entity\VehicleIntervention
-            places:
-                - toStart
-                - inProgress
-                - done
-            transitions:
-                started:
-                    from: toStart
-                    to: inProgress
-                finished:
-                    from: inProgress
-                    to: done
-        vehicle:
-            type: 'state_machine'
-            marking_store:
-                type: 'single_state'
-                arguments: ['state']
-            supports:
-                - AppBundle\Entity\Vehicle
-            places:
-                - expert
-                - control
-                - mechanical
-                - bodywork
-                - cosmetic
-                - cleaning
-                - photo
-                - validate
-                - finish
-            transitions:
-                expertised:
-                    from: expert
-                    to: control
-                to_mechanical:
-                    from: [control, bodywork, cosmetic, cleaning, photo]
-                    to: mechanical
-                to_bodywork:
-                    from: [control, mechanical, cosmetic, cleaning, photo]
-                    to: bodywork
-                to_cosmetic:
-                    from: [control, bodywork, mechanical, cleaning, photo]
-                    to: cosmetic
-                to_cleaning:
-                    from: [control, bodywork, cosmetic, mechanical, photo]
-                    to: cleaning
-                to_photo:
-                    from: [control, bodywork, cosmetic, cleaning, mechanical]
-                    to: photo
-                validated:
-                    from: [mechanical, bodywork, cosmetic, cleaning, photo]
-                    to: validate
-                terminated:
-                    from: validate
-                    to: finish
 
 assetic:
     debug:          '%kernel.debug%'
