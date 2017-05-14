@@ -31,6 +31,11 @@ class VehicleInterventionController extends Controller
         ) {
             $machine->apply($intervention, 'finished');
             $intervention->setEndDate(new \DateTime());
+            if ($intervention->getTime() === null) {
+                $intervention->setTime(abs(
+                    $intervention->getStartDate()->getTimestamp() - $intervention->getEndDate()->getTimestamp()
+                ) / 60);
+            }
         } else {
             return new Response('', 400);
         }

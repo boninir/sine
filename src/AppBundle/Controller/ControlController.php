@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Intervention;
 use AppBundle\Entity\Picture;
 use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
@@ -12,65 +13,44 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class EntranceController extends Controller
+class ControlController extends Controller
 {
     /**
-     * @Route("/entrance", name="entrance")
-     * @Template
+     * @Route("/control/process/{id}", name="process-vehicle-control")
      */
-    public function indexAction()
-    {
-        $vehicles = $this->getDoctrine()
-            ->getRepository('AppBundle:Vehicle')
-            ->findByState(Vehicle::STATE_CONTROL);
-
-        return ['vehicles' => $vehicles];
-    }
-
-    /**
-     * @Route("/control/{id}", name="control")
-     * @Template
-     */
-    public function controlAction(Vehicle $vehicle, Request $request)
+    public function vehicleAction(Vehicle $vehicle, Request $request)
     {
         if ($vehicle->getState() !== Vehicle::STATE_CONTROL) {
-            return $this->redirectToRoute('entrance');
+            return $this->redirectToRoute('process', ['type' => 'control']);
         }
 
+        $em = $this->getDoctrine()->getManager();
         $form = $this->createForm(VehicleType::class, $vehicle);
+
         $interventions = $this->getDoctrine()
-            ->getRepository('AppBundle:Intervention')
-            ->findBy(array('required' => 1));
+            ->getRepository(Intervention::class)
+            ->findForVehicle($vehicle);
 
         $formIntervention = $this->createForm(
             ExpertiseType::class,
             ['interventions' => $interventions],
             ['vehicle' => $vehicle]
         );
-        $em = $this->getDoctrine()->getManager();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicle = $form->getData();
-
-            $em->persist($vehicle);
             $em->flush();
+            $this->addFlash('notice', 'Les informations ont bien été mises à jour.');
 
-            $this->addFlash(
-                'notice',
-                'Les informations ont bien été mises à jour.'
-            );
-
-            return $this->redirectToRoute('control', array('id' => $vehicle->getId()));
+            return $this->redirectToRoute('process-vehicle-control', ['id' => $vehicle->getId()]);
         }
 
         $formIntervention->handleRequest($request);
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
-
             $interventionsToSave = $formIntervention->get('interventions');
+
             foreach ($interventionsToSave as $interventionToSave) {
                 $vehicleIntervention = $em
                     ->getRepository(VehicleIntervention::class)
@@ -87,11 +67,18 @@ class EntranceController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
+                    $intervention = $interventionToSave->getData();
+
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($interventionToSave->getData())
+                        ->addIntervention($intervention)
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
+                        ->setTime(
+                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
+                            ? $interventionToSave['time']->getData()
+                            : null
+                        )
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -106,6 +93,7 @@ class EntranceController extends Controller
                 $picture = (new Picture())
                     ->setName(sprintf('%s.%s', md5(uniqid()), $file->guessExtension()))
                     ->setVehicle($vehicle);
+
                 $em->persist($picture);
 
                 $file->move(
@@ -148,24 +136,21 @@ class EntranceController extends Controller
             $machine->apply($vehicle, $typeToLaunch->getTransition());
 
             $em->flush();
+            $this->addFlash('notice', 'Le contrôle à bien été enregistré.');
 
-            $this->addFlash(
-                'notice',
-                'L\'expertise à bien été enregistrée.'
-            );
-
-            return $this->redirectToRoute('entrance');
+            return $this->redirectToRoute('process', ['type' => 'control']);
         }
 
         $pictures = $em->getRepository(Picture::class)
             ->findByVehicle($vehicle);
 
-        return [
+        return $this->render('AppBundle:Process:fullVehicle.html.twig', [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
             'pictures' => $pictures,
-        ];
+            'type' => 'control',
+        ]);
     }
 }

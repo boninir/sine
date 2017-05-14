@@ -8,34 +8,18 @@ use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
+use Doctrine\ORM\UnitOfWork;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Workflow\Exception\LogicException;
 
-class ExpertController extends Controller
+class ExpertiseController extends Controller
 {
     /**
-     * @Route("/expert", name="expert")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function expertIndexAction()
-    {
-        $vehicles = $this->getDoctrine()
-            ->getRepository('AppBundle:Vehicle')
-            ->findByState(Vehicle::STATE_EXPERT);
-
-        return $this->render('AppBundle:Expert:expert.html.twig', array(
-            'vehicles' => $vehicles,
-        ));
-    }
-
-    /**
-     * @Route("/expert/addVehicle", name="add-vehicle")
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/expertise/addVehicle", name="add-vehicle")
      */
     public function addVehicleAction(Request $request)
     {
@@ -57,29 +41,28 @@ class ExpertController extends Controller
                 'Le véhicule a bien été enregistré.'
             );
 
-            return $this->redirectToRoute('expert');
+            return $this->redirectToRoute('process', ['type' => 'expertise']);
         }
 
-        return $this->render('AppBundle:Expert:addVehicle.html.twig', array(
+        return $this->render('AppBundle:Expertise:addVehicle.html.twig', array(
             'form' => $form->createView(),
+            'type' => 'expertise',
         ));
     }
 
     /**
-     * @Route("/expertise/{id}", name="expertise")
      * @param Vehicle $vehicle
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/expertise/process/{id}", name="process-vehicle-expertise")
      */
-    public function processExpertiseAction(Vehicle $vehicle, Request $request)
+    public function processAction(Vehicle $vehicle, Request $request)
     {
-        if ($vehicle->getState() !== Vehicle::STATE_EXPERT) {
-            return $this->redirectToRoute('expert');
+        if ($vehicle->getState() !== Vehicle::STATE_EXPERTISE) {
+            return $this->redirectToRoute('process', ['type' => 'expertise']);
         }
 
         $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(VehicleType::class, $vehicle);
 
         $interventions = $this->getDoctrine()
@@ -95,28 +78,20 @@ class ExpertController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $vehicle = $form->getData();
-
-            $em->persist($vehicle);
             $em->flush();
+            $this->addFlash('notice', 'Les informations ont bien été mises à jour.');
 
-            $this->addFlash(
-                'notice',
-                'Les informations ont bien été mises à jour.'
-            );
-
-            return $this->redirectToRoute('expertise', array('id' => $vehicle->getId()));
+            return $this->redirectToRoute('process-vehicle-expertise', ['id' => $vehicle->getId()]);
         }
 
         $formIntervention->handleRequest($request);
 
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
-
             $interventionsToSave = $formIntervention->get('interventions');
 
             foreach ($interventionsToSave as $interventionToSave) {
-                $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
+                $vehicleIntervention = $em
+                    ->getRepository(VehicleIntervention::class)
                     ->findOneBy([
                         'vehicle' => $vehicle,
                         'intervention' => $interventionToSave->getData()
@@ -130,11 +105,18 @@ class ExpertController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
+                    $intervention = $interventionToSave->getData();
+
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($interventionToSave->getData())
+                        ->addIntervention($intervention)
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
+                        ->setTime(
+                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
+                            ? $interventionToSave['time']->getData()
+                            : null
+                        )
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -163,24 +145,21 @@ class ExpertController extends Controller
             $machine->apply($vehicle, 'expertised');
 
             $em->flush();
+            $this->addFlash('notice', "L'expertise à bien été enregistrée.");
 
-            $this->addFlash(
-                'notice',
-                'L\'expertise à bien été enregistrée.'
-            );
-
-            return $this->redirectToRoute('expert');
+            return $this->redirectToRoute('process', ['type' => 'expertise']);
         }
 
         $pictures = $em->getRepository(Picture::class)
             ->findByVehicle($vehicle);
 
-        return $this->render('AppBundle:Expert:processExpertise.html.twig', array(
+        return $this->render('AppBundle:Process:fullVehicle.html.twig', [
             'vehicle' => $vehicle,
             'interventions' => $interventions,
             'form' => $form->createView(),
             'formIntervention' => $formIntervention->createView(),
             'pictures' => $pictures,
-        ));
+            'type' => 'expertise',
+        ]);
     }
 }
