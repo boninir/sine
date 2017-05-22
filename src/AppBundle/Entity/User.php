@@ -72,6 +72,12 @@ class User implements UserInterface
     private $roles;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Society")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $society;
+
+    /**
      * @return integer
      */
     public function getId()
@@ -218,4 +224,22 @@ class User implements UserInterface
     {
         return $this->roles;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSociety()
+    {
+        return $this->society;
+    }
+
+    /**
+     * @param mixed $society
+     */
+    public function setSociety($society)
+    {
+        $this->society = $society;
+        return $this;
+    }
+
 }

@@ -62,7 +62,7 @@ class DefaultController extends Controller
                 ));
             }
 
-            $finish = count($emIntervention->findBy(array('vehicle' => $vehicle, 'state' => 'terminé')));
+            $finish = count($emIntervention->findBy(array('vehicle' => $vehicle, 'state' => 'done')));
             $totalIntervention = $vehicle->getInterventions()->count() == 0 ? 1 : $vehicle->getInterventions()->count();
 
             $progress = ($finish / $totalIntervention) * 100;

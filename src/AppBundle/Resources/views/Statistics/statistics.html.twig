@@ -1,0 +1,202 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block core %}
+    <div class="container center-block" role="main">
+        <h1>Statistiques</h1>
+        <input id='duree' type="submit" value="6 derniers mois" class="btn-success" />
+        <input id='dl' type="submit" value="télecharger" class="btn-link" />
+
+        <div class="jumbotron">
+            <table id='table' class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                   <td style="border: transparent"></td>
+                    {% for cptMonth, fact in facture %}
+                        <th style="background-color: darkgray">{{ moisDeLAnnee[cptMonth] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Nb entrées</td>
+                    {% for cptMonth, fact in facture %}
+                       <td
+                       {% if (cptMonth) in [6,5,4,3,2,1] and cptMonth-1!=0 %}
+                           {% if facture[(cptMonth-1)%12]['Nb entrées']<facture[cptMonth]['Nb entrées'] %}
+                               style = "background-color:lightgreen"
+                           {% else %}
+                               style = "background-color:lightcoral"
+                           {% endif %}
+                       {% endif %}>{ facture[cptMonth]['Nb entrées'] }}</td>
+                    {% endfor %}
+                </tr>
+
+                <tr>
+                   <td style="background-color: darkgray">Nb sorties</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['Nb sorties'] }}</td>
+                    {% endfor %}
+                </tr>
+
+                <tr style="border-top: darkgray;border-bottom: transparent; border-style : solid">
+                   <td style="background-color: lightgray">Mécanique</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['repartitionAteliers']['% Mécanique'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Carrosserie</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['repartitionAteliers']['% Carrosserie'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Intérieur</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['repartitionAteliers']['% Intérieur'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Nettoyage</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['repartitionAteliers']['% Nettoyage'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr style=" border: transparent; border-top: darkgray; border-style : solid">
+                   <td style="background-color: darkgrey">Circuit (jo)</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['durationAteliers']['Temps moyen voiture dans atelier']}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">< 5 jours</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['durationAteliers']['less5d'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">entre 5 et 10jours</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['durationAteliers']['between5and10d'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray"> 10 jours</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['durationAteliers']['more10d'] }}%</td>
+                    {% endfor %}
+                </tr>
+                <tr style="border-top: darkgray;border-bottom: darkgray; border-style : solid">
+                   <td style="background-color: lightgray">Total livraison/reception (jo)</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['durationCircuits']['totalDuration'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Elements carrosserie</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['nbItems'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Facturés</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['itemsToPay'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Gratuits</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['itemsFree'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Raccords</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['raccords'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Retroviseurs</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['retroviseurs'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Jantes</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['jantes'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Petites tôleries</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['petitesToleries'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: darkgray">Heures carrosserie</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['workshopItems']['heuresCarrosserie'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr  style="border-top: darkgray;border-bottom: transparent; border-style : solid">
+                   <td style="background-color: lightgray">Interventions mécaniques</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['nbItems'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Vidanges</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['vidange'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Trains de pneus</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['trainsDePneus'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td  style="background-color: lightgray">Disques</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['disques'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Plaquettes</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['plaquettes'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Géométrie</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['geometrie'] }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                   <td style="background-color: lightgray">Heures mécanique</td>
+                    {% for cptMonth, fact in facture %}
+                       <td>{{ facture[cptMonth]['mechanicalItems']['heuresMecanique'] }}</td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        $('#dl').click(function() {
+            $("#id").tableExport({
+            });
+        })
+        $('#duree').click(function() {
+            if($('#duree').val() == "mois en cours"){
+                $('#duree').val("6 derniers mois");
+
+            }else{
+                $('#duree').val("mois en cours");
+            }
+
+        })
+    </script>
+{% endblock %}

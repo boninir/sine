@@ -1,58 +1,88 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <a class="navbar-brand" href="/">
-        SINEO
-    </a>
     <div class="container">
         <div class="navbar-header">
-            <button class="navbar-toggle collapsed" aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" type="button">
+            <button class="navbar-toggle collapsed" aria-controls="navbar" aria-expanded="true" data-target="#navbar" data-toggle="collapse" type="button">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
         </div>
+
+
+        {% set workshopsType = ['mechanical', 'bodywork', 'cosmetic', 'cleaning'] %}
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="{{ path('process', {type: 'expertise'}) }}">Expert</a>
-                </li>
-                <li>
-                    <a href="{{ path('process', {type: 'control'}) }}">Contrôle entrée</a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                {% if is_granted('ROLE_EXPERT') %}
+                    <li {% if type is defined and type == 'expertise' %}class="active"{% endif %}>
+                        <a href="{{ path('process', {type: 'expertise'}) }}">Expertise</a>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_TRANSPORTER') %}
+                    <li {% if type is defined and type == 'transport' %}class="active"{% endif %}>
+                            <a href="{{ path('process', {type: 'transport'}) }}">Transport</a>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_CONTROL') %}
+                    <li {% if type is defined and type == 'control' %}class="active"{% endif %}>
+                        <a href="{{ path('process', {type: 'control'}) }}">Contrôle d'entrée</a>
+                    </li>
+                {% endif %}
+
+                {% if is_granted('ROLE_MASTER_WORKSHOP') %}
+                <li class="dropdown{% if type is defined and type in workshopsType %} active{% endif %}">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
                         Ateliers <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="{{ path('process', {type: 'mechanical'}) }}">Mécanique</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('process', {type: 'bodywork'}) }}">Carosserie</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('process', {type: 'cosmetic'}) }}">Cosmétique</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('process', {type: 'cleaning'}) }}">Nettoyage</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('process', {type: 'photo'}) }}">Photos</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#contact">Validation de sortie</a>
-                </li>
-                <li>
-                    <a href="#contact">Changement de circuit</a>
-                </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_MECHANICIAN') %}
+                            <li {% if type is defined and type == 'mechanical' %}class="active"{% endif %}>
+                                <a href="{{ path('process', {type: 'mechanical'}) }}">Mécanique</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_BODYBUILDER') %}
+                            <li {% if type is defined and type == 'bodywork' %}class="active"{% endif %}>
+                                <a href="{{ path('process', {type: 'bodywork'}) }}">Carosserie</a>
+                            </li>
+                         {% endif %}
+                        {% if is_granted('ROLE_BEAUTICIAN') %}
+                            <li {% if type is defined and type == 'cosmetic' %}class="active"{% endif %}>
+                                <a href="{{ path('process', {type: 'cosmetic'}) }}">Cosmétique</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_CLEANER') %}
+                            <li {% if type is defined and type == 'cleaning' %}class="active"{% endif %}>
+                                <a href="{{ path('process', {type: 'cleaning'}) }}">Nettoyage</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_PHOTOGRAPHER') %}
+                            <li {% if type is defined and type == 'photo' %}class="active"{% endif %}>
+                                <a href="{{ path('process', {type: 'photo'}) }}">Photos</a>
+                            </li>
+                        {% endif %}
+                {% if is_granted('ROLE_MASTER_WORKSHOP') %}
+                        </ul>
+                    </li>
+
+                    <li {% if type is defined and type == 'validation' %}class="active"{% endif %}>
+                        <a href="{{ path('process', {type: 'validation'}) }}">Validation de sortie</a>
+                    </li>
+                    <li {% if type is defined and type == 'change' %}class="active"{% endif %}>
+                        <a href="{{ path('process', {type: 'change'}) }}">Changement de circuit</a>
+                    </li>
+                {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button">
                             Administration <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ path('statistics') }}">Statistiques</a>
+                            </li>
                             <li>
                                 <a href="{{ path('users') }}">Gestion des utilisateur</a>
                             </li>
@@ -62,6 +92,10 @@
                 {% if is_granted('ROLE_USER') %}
                     <li>
                         <a href="{{ path('logout') }}">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ path('login') }}">Connexion</a>
                     </li>
                 {% endif %}
             </ul>

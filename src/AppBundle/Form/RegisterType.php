@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\View\ChoiceListView;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -33,24 +34,49 @@ class RegisterType extends AbstractType
                 'second_options' => ['label' => 'Confirmer le mot de passe'],
             ])
             ->add('mail', TextType::class, ['label' => 'Adresse email'])
-        ;
-
-        if ($this->checker->isGranted('ROLE_ADMIN')) {
-            $builder->add('roles', ChoiceType::class, [
+            ->add('societyName', ChoiceType::class, [
+            'choices' => [
+                'Peugeot' => 'Peugeot',
+                'Citroën' => 'Citroën',
+                'Sineo' => 'Sineo',
+                'Aramis' => 'Aramis',
+                'Nissan' => 'Nissan',
+                ],
+                'expanded' => false,
+                'label' => 'Nom de la société',
+                'multiple' => false,
+            ])
+            ->add('societyCity', ChoiceType::class, [
+            'choices' => [
+                'Fâches' => 'Fâches',
+                'Hellemes' => 'Hellemes',
+                'Lille' => 'Lille',
+                'Lomme' => 'Lomme',
+                'Roncq' => 'Roncq',
+                'Roubaix' => 'Roubaix',
+                'Villeneuve D\'Ascq' => 'Villeneuve D\'Ascq'
+                ],
+                'expanded' => false,
+                'label' => 'Ville de la société',
+                'multiple' => false,
+            ])
+            ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
                     'Expert' => 'ROLE_EXPERT',
-                    'Sous traitant' => 'ROLE_SUBCONTRACTOR',
+                    'Controleur d\'entrée' => 'ROLE_CONTROL',
+                    'Maître d\'atelier' => 'ROLE_MASTER_WORKSHOP',
+                    'Transporteur' => 'ROLE_TRANSPORTER',
                     'Mécanicien' => 'ROLE_MECHANICIAN',
                     'Carrossier' => 'ROLE_BODYBUILDER',
-                    'Peintre' => 'ROLE_PAINTER',
+                    'Peintre' => 'ROLE_BEAUTICIAN',
                     'Nettoyeur' => 'ROLE_CLEANER',
+                    'Photographe' => 'ROLE_PHOTOGRAPHER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
-                'expanded' => true,
-                'label' => 'Rôle(s)',
+                'expanded' => false,
+                'label' => 'Rôle',
                 'multiple' => true,
             ]);
-        }
+        //if ($this->checker->isGranted('ROLE_USER')) { DE-COMMENTER APRES
     }
 }

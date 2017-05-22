@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Vehicle
 {
     const STATE_EXPERTISE = 'expertise';
+    const STATE_TRANSPORT = 'transport';
     const STATE_CONTROL = 'control';
 
     /**
@@ -84,6 +85,62 @@ class Vehicle
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="expertise_date", type="datetime", nullable=true)
+     */
+    private $expertiseDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="send_date", type="datetime", nullable=true)
+     */
+    private $sendDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="receive_date", type="datetime", nullable=true)
+     */
+    private $receiveDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="control_date", type="datetime", nullable=true)
+     */
+    private $controlDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="inWork_date", type="datetime", nullable=true)
+     */
+    private $inWorkDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="outWork_date", type="datetime", nullable=true)
+     */
+    private $outWorkDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="validate_date", type="datetime", nullable=true)
+     */
+    private $validateDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="delivery_date", type="datetime", nullable=true)
+     */
+    private $deliveryDate;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="releaseDate", type="datetime", nullable=true)
      */
     private $releaseDate;
@@ -133,8 +190,7 @@ class Vehicle
      * @ORM\JoinColumn(nullable=false)
      */
     private $pictures;
-
-
+    
     public function __construct()
     {
         $this->creationDate = new \Datetime();
@@ -549,5 +605,135 @@ class Vehicle
         $this->pictures->removeElement($picture);
 
         return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getControlDate()
+    {
+        return $this->controlDate;
+    }
+
+    /**
+     * @param \DateTime $controlDate
+     */
+    public function setControlDate($controlDate)
+    {
+        $this->controlDate = $controlDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getInWorkDate()
+    {
+        return $this->inWorkDate;
+    }
+
+    /**
+     * @param \DateTime $inWorkDate
+     */
+    public function setInWorkDate($inWorkDate)
+    {
+        $this->inWorkDate = $inWorkDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getOutWorkDate()
+    {
+        return $this->outWorkDate;
+    }
+
+    /**
+     * @param \DateTime $outWorkDate
+     */
+    public function setOutWorkDate($outWorkDate)
+    {
+        $this->outWorkDate = $outWorkDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getValidateDate()
+    {
+        return $this->validateDate;
+    }
+
+    /**
+     * @param \DateTime $validateDate
+     */
+    public function setValidateDate($validateDate)
+    {
+        $this->validateDate = $validateDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDeliveryDate()
+    {
+        return $this->deliveryDate;
+    }
+
+    /**
+     * @param \DateTime $deliveryDate
+     */
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->deliveryDate = $deliveryDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getExpertiseDate()
+    {
+        return $this->expertiseDate;
+    }
+
+    /**
+     * @param \DateTime $expertiseDate
+     * @return Vehicle
+     */
+    public function setExpertiseDate($expertiseDate)
+    {
+        $this->expertiseDate = $expertiseDate;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSendDate()
+    {
+        return $this->sendDate;
+    }
+
+    /**
+     * @param \DateTime $sendDate
+     */
+    public function setSendDate($sendDate)
+    {
+        $this->sendDate = $sendDate;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReceiveDate()
+    {
+        return $this->receiveDate;
+    }
+
+    /**
+     * @param \DateTime $receiveDate
+     */
+    public function setReceiveDate($receiveDate)
+    {
+        $this->receiveDate = $receiveDate;
     }
 }

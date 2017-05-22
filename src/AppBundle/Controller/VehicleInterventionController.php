@@ -40,6 +40,13 @@ class VehicleInterventionController extends Controller
             ->flush();
 
         if ($currentVehicleState !== $intervention->getVehicle()->getState()) {
+            $em = $this->getDoctrine()->getManager();
+            $vehicle = $intervention->getVehicle();
+            $vehicle->setOutWorkDate(new \DateTime());
+
+            $em->persist($vehicle);
+            $em->flush();
+
             return new Response('allDone');
         }
 

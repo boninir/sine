@@ -12,10 +12,34 @@
     </div>
 
     <div class="container">
+        {% if type != 'onRoad' and type != 'change' %}
+            <div class="row center-block text-center">
+                <h3>Liste des véhicules pouvant être traités</h3>
+            </div>
+        {% endif %}
+        {% if type == 'change' %}
+            <div class="row center-block text-center">
+                <h3>Liste des véhicules pouvant changer d'atelier</h3>
+            </div>
+        {% endif %}
 
-        <div class="row center-block text-center">
-            <h3>Liste des véhicules pouvant être traités</h3>
-        </div>
+        {% if type == 'transport' %}
+            <div class="row center-block text-center">
+                <p id = "validateTransport" class="btn btn-success">
+                    Valider le transport des véhicules
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                </p>
+            </div>
+        {% endif %}
+
+        {% if type == 'onRoad' %}
+            <div class="row center-block text-center">
+                <p id = "validateDelivery" class="btn btn-success">
+                    Valider la bonne livraison des véhicules
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                </p>
+            </div>
+        {% endif %}
 
         {% if authorizeCreation %}
             <div class="row center-block text-center">
@@ -32,10 +56,12 @@
             {% if vehicles is empty %}
                 <div class="alert alert-warning text-center" role="alert">Aucun véhicule n'est actuellement disponible.</div>
             {% else %}
+
+                {% set traductionAteliers = { 'mechanical':'Mécanique', 'cosmectic':'Cosmétique', 'cleaning':'Nettoyage', 'photo':'Photo', 'bodywork':'Carosserie'} %}
                 {% for vehicle in vehicles %}
                     <div class="panel panel-warning">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ vehicle.mark  ~ ' ' ~ vehicle.model ~ ' (' ~ vehicle.registration ~ ')'}}</h3>
+                        <div class="panel-heading" {% if (date("now"|date("m/d/Y")).diff(date(vehicle.sendDate))).days > 4 %}style="background-color: lightcoral"><b>vehicule prêt à être expédié depuis {{ (date("now"|date("m/d/Y")).diff(date(vehicle.sendDate))).days  }} jours</b> {% else %}>{% endif %}
+                            <h3 class="panel-title">{{ vehicle.mark  ~ ' ' ~ vehicle.model ~ ' (' ~ vehicle.registration ~ ')'}} {% if type == 'change' %}{{ ' / Atelier ' ~ traductionAteliers[vehicle.state]  }} {% endif %}</h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -63,18 +89,135 @@
                                 <div class="col-md-5">- Essence : {{ vehicle.fuel.denomination }}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-7"></div>
-                                <div class="col-md-5">
-                                    <a href="{{ path(route, {type: type, id: vehicle.id}) }}" class="btn btn-primary">
-                                        Procéder
-                                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                                    </a>
+
+                            {% if vehicle.state == "transport" %}
+                                <br>
+                                <div class="col-md-7">
+                                    <b>Mise à disposition le {{ vehicle.sendDate|date('d/m/Y') }} chez </b>
                                 </div>
+                                <div class="col-md-5">
+                                    <b>Récupérer le véhicule</b>
+                                    <input type="checkbox" class="transport-{{ vehicle.id }}">
+                                </div>
+                            {% elseif (vehicle.state != 'road' and type != 'change') %}
+                                    <div class="col-md-5">
+                                        <a href="{{ path(route, {type: type, id: vehicle.id}) }}" class="btn btn-primary">
+                                            Procéder
+                                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                        </a>
+                                    </div>
+                            {% endif %}
+                                {% if type == 'change' %}
+                                    <div class="col-md-5">
+                                        <br>
+                                        <form>
+                                            <input type="button" class="validateRedirect btn btn-link" value="Valider l'envoi vers l'atelier" />
+                                            <select class="redirect-{{ vehicle.id }}">
+                                                {% for trans in transitions[vehicle.id] %}
+                                                    <option value="{{ trans }}"><p style="font-size: x-large">{{ traductionAteliers[trans] }}</p></option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </div>
+                                {% endif %}
                             </div>
+
                         </div>
                     </div>
                 {% endfor %}
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.validateRedirect').click(function() {
+                var select = $("[class^='redirect-']");
+                var idToSave = select.attr('class').split('-')[1];
+                var whereToGo = 'to_'+select.val();
+
+                $.ajax({
+                    url: '{{ path('redirect-vehicle')}}',
+                    data: "idAndPlace="+idToSave+'/'+whereToGo,
+                    type: 'POST',
+                    success: function(data) {
+                        window.location.reload();
+                    },
+                    error: function(data) {
+                        alert("error redirect (ajax)");
+                    }
+                });
+
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#validateTransport').click(function() {
+                var tabIdTransport = [];
+                $("[class^='transport-']").each(function() {
+                    if(this.checked){
+                        var idToSave = $(this).attr('class').split('-')[1];
+                        tabIdTransport.push(idToSave);
+                    }
+                });
+                if(tabIdTransport.length > 0){
+                    $.ajax({
+                        url: '{{ path('process-transport') }}',
+                        data: "tabIdTransport="+tabIdTransport,
+                        type: 'POST',
+                        success: function(data) {
+                            window.location.reload();
+                        },
+                        error: function(data) {
+                            alert("error create transport (ajax)");
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#validateDelivery').click(function() {
+                $.ajax({
+                    url: '{{ path('validate-transport',{'userId': userId.id}) }}',
+                    type: 'POST',
+                    success: function(data) {
+                        window.location.reload();
+                    },
+                    error: function(data) {
+                        alert("error validate transport (ajax)");
+                    }
+                });
+            })
+        });
+    </script>
+
+    <script>
+        //mise a jour date
+        $(document).ready(function() {
+            $('#majDateExp').click(function(e) {
+                e.preventDefault();
+                var dateExp = $('#dateExp').val();
+                $.ajax({
+                    url: 'http://localhost:8888/sineo/web/app_dev.php/updateDateControl/' + vehicleId,
+                    data: 'date=' + dateExp,
+                    type: 'POST',
+                    success: function(data) {
+                        window.location.reload();
+                    },
+                    error: function(data) {
+                        alert("La mise à jour de la date a échoué");
+                    }
+                });
+            })
+        })
+    </script>
 {% endblock %}

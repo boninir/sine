@@ -1,41 +1,38 @@
-{% extends 'AppBundle::layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block content %}
-
-<div class="container center-block" role="main">
-
-    <div class="row text-center">
-        <h3>Connexion</h3>
-    </div>
-    <hr>
-
-    <div class="col-md-8 col-md-offset-2">
-        <div class="row theme-showcase" role="main">
-            {% for flash_message in app.session.flashBag.get('notice') %}
-                <div class="alert alert-success alert-dismissible flash-notice" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {{ flash_message }}
-                </div>
-            {% endfor %}
-
-            {% if error %}
-                <div class="alert alert-warning alert-dismissible flash-notice" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
-                </div>
-            {% endif %}
+{% block body %}
+    <div class="col-md-6 col-md-offset-3" role="main">
+        <div class="row text-center">
+            <h3>Connexion</h3>
         </div>
+        <hr>
 
-        {% form_theme form 'AppBundle:form:fields.html.twig' %}
+        <div class="">
+            <div class="row theme-showcase" role="main">
+                {% for flash_message in app.session.flashBag.get('notice') %}
+                    <div class="alert alert-success alert-dismissible flash-notice" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{ flash_message }}
+                    </div>
+                {% endfor %}
 
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <div class="pull-right">
-            <input type="submit" value="Se connecter" class="btn btn-success" />
-            <a href="{{ path('register') }}" class="btn btn-primary">S'inscrire</a>
+                {% if error %}
+                    <div class="alert alert-warning alert-dismissible flash-notice" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% form_theme form 'AppBundle:form:fields.html.twig' %}
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="pull-right">
+                <input type="submit" value="Se connecter" class="btn btn-success" />
+                <a href="{{ path('register') }}" class="btn btn-primary">S'inscrire</a>
+            </div>
+            {{ form_end(form) }}
         </div>
-        {{ form_end(form) }}
     </div>
-</div>
-
 {% endblock %}

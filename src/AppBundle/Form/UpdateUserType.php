@@ -39,21 +39,22 @@ class UpdateUserType extends AbstractType
             ])
             ->add('mail', TextType::class, ['label' => 'Adresse email', 'required' => false])
             ->add('roles', ChoiceType::class, [
-                'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
-                    'Expert' => 'ROLE_EXPERT',
-                    'Sous traitant' => 'ROLE_SUBCONTRACTOR',
-                    'Mécanicien' => 'ROLE_MECHANICIAN',
-                    'Carrossier' => 'ROLE_BODYBUILDER',
-                    'Peintre' => 'ROLE_PAINTER',
-                    'Nettoyeur' => 'ROLE_CLEANER',
-                    'Administrateur' => 'ROLE_ADMIN',
-                ],
-                'expanded' => true,
-                'label' => 'Rôle(s)',
-                'multiple' => true,
-                'required' => false,
-            ])
+               'choices' => [
+                   'Expert' => 'ROLE_EXPERT',
+                   'Controleur d\'entrée' => 'ROLE_CONTROL',
+                   'Maître d\'atelier' => 'ROLE_MASTER_WORKSHOP',
+                   'Transporteur' => 'ROLE_TRANSPORTER',
+                   'Mécanicien' => 'ROLE_MECHANICIAN',
+                   'Carrossier' => 'ROLE_BODYBUILDER',
+                   'Peintre' => 'ROLE_BEAUTICIAN',
+                   'Nettoyeur' => 'ROLE_CLEANER',
+                   'Photographe' => 'ROLE_PHOTOGRAPHER',
+                   'Administrateur' => 'ROLE_ADMIN',
+               ],
+               'expanded' => false,
+               'label' => 'Rôle(s)',
+               'multiple' => true,
+           ])
             ->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
                 $form = $event->getForm();
                 $user = $event->getData();

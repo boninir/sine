@@ -18,13 +18,12 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'Raccord gauche',
-                'Raccord droit',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture pc',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention1);
@@ -34,258 +33,319 @@ class LoadBodyworkInterventionData extends AbstractFixture implements OrderedFix
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'Raccord gauche',
-                'Raccord droit',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture pc',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention2);
 
         $intervention3 = (new Intervention())
-            ->setDenomination('Capôt')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention3);
-
-        $intervention4 = (new Intervention())
             ->setDenomination('Aile AV gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
-        $manager->persist($intervention4);
+        $manager->persist($intervention3);
 
 
-        $intervention5 = (new Intervention())
+        $intervention4 = (new Intervention())
             ->setDenomination('Aile AV droite')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
-        $manager->persist($intervention5);
+        $manager->persist($intervention4);
 
-        $intervention6 = (new Intervention())
-            ->setDenomination('Porte AV gauche')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention6);
-
-        $intervention7 = (new Intervention())
-            ->setDenomination('Porte AV droite')
-            ->setTypeIntervention($type)
-            ->setRequired(1)
-            ->setAnswers([
-                'Raccord',
-                'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
-            ])
-        ;
-        $manager->persist($intervention7);
-
-        $intervention8 = (new Intervention())
+        $intervention5 = (new Intervention())
             ->setDenomination('Aile AR gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
-        $manager->persist($intervention8);
+        $manager->persist($intervention5);
 
-        $intervention9 = (new Intervention())
+        $intervention6 = (new Intervention())
             ->setDenomination('Aile AR droite')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
-        $manager->persist($intervention9);
+        $manager->persist($intervention6);
 
-        $intervention10 = (new Intervention())
+        $intervention7 = (new Intervention())
+            ->setDenomination('Porte AV gauche')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention7);
+
+        $intervention8 = (new Intervention())
+            ->setDenomination('Porte AV droite')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention8);
+
+        $intervention9 = (new Intervention())
             ->setDenomination('Porte AR gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
-        $manager->persist($intervention10);
+        $manager->persist($intervention9);
 
-        $intervention11 = (new Intervention())
+        $intervention10 = (new Intervention())
             ->setDenomination('Porte AR droite')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention10);
+
+        $intervention11 = (new Intervention())
+            ->setDenomination('Bas de caisse gauche')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention11);
 
         $intervention12 = (new Intervention())
-            ->setDenomination('Coffre')
+            ->setDenomination('Bas de caisse droit')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention12);
 
         $intervention13 = (new Intervention())
-            ->setDenomination('Toit')
+            ->setDenomination('Jante AVg')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
                 'Raccord',
+                'Peinture élément complet',
                 'Tôlerie',
-                'Peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention13);
 
-        $intervention14 = (new Intervention())
-            ->setDenomination('Bas de caisse gauche')
+        $intervention23 = (new Intervention())
+            ->setDenomination('Jante AVd')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention23);
+
+        $intervention21 = (new Intervention())
+            ->setDenomination('Jante ARg')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Tôlerie',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention21);
+
+        $intervention22 = (new Intervention())
+            ->setDenomination('Jante ARd')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Tôlerie',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention22);
+
+        $intervention14 = (new Intervention())
+            ->setDenomination('Rétroviseur droit')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention14);
 
         $intervention15 = (new Intervention())
-            ->setDenomination('Bas de caisse droit')
+            ->setDenomination('Rétroviseur gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
                 'Tôlerie',
-                'Peinture',
-                'Redressage + peinture',
-                'Changer + peinture',
-                'Non',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention15);
 
         $intervention16 = (new Intervention())
-            ->setDenomination('Optique AV')
+            ->setDenomination('Capôt')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'Gauche OK',
-                'Gauche à changer',
-                'Droit OK',
-                'Droit à changer',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention16);
 
         $intervention17 = (new Intervention())
-            ->setDenomination('Optique AR')
+            ->setDenomination('Hayon/Lunette')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'Gauche OK',
-                'Gauche à changer',
-                'Droit OK',
-                'Droit à changer',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention17);
 
         $intervention18 = (new Intervention())
-            ->setDenomination('Bas de caisse droit')
+            ->setDenomination('Toit')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'OK',
-                'Réparation impact',
-                'À changer',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention18);
 
         $intervention19 = (new Intervention())
-            ->setDenomination('Réparation jante alu')
+            ->setDenomination('Montant gauche')
             ->setTypeIntervention($type)
             ->setRequired(1)
             ->setAnswers([
-                'AV droite',
-                'AV gauche',
-                'AR droit',
-                'AR gauche',
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
             ])
         ;
         $manager->persist($intervention19);
+
+        $intervention20 = (new Intervention())
+            ->setDenomination('Montant droit')
+            ->setTypeIntervention($type)
+            ->setRequired(1)
+            ->setAnswers([
+                'Raccord',
+                'Peinture élément complet',
+                'Débosselage',
+                'Redressage',
+                'Tôlerie',
+                'Changement élément',
+            ])
+        ;
+        $manager->persist($intervention20);
 
         $manager->flush();
     }

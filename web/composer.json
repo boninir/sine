@@ -1,0 +1,7 @@
+{
+    "require": {
+        "symfony/finder": "^3.2",
+        "symfony/symfony": "^3.2",
+        "friendsofsymfony/jsrouting-bundle": "^1.6"
+    }
+}

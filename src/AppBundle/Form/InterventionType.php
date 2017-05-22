@@ -83,12 +83,6 @@ class InterventionType extends AbstractType
                         'required' => false,
                         'data' => $value === null ? null : $value->getComment(),
                     ])
-                    ->add('time', NumberType::class, [
-                        'label' => 'Temps à passer (en minutes)',
-                        'mapped' => false,
-                        'required' => false,
-                        'data' => $value === null ? null : $value->getTime(),
-                    ])
                 ;
 
                 if (empty($intervention->getAnswers())) {

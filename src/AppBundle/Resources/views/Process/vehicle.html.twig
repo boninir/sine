@@ -94,12 +94,13 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.btn-group .btn').click(function() {
-                var interventionId = $(this).parent().data('id')
-                    state = $(this).data('state')
-                    that = this;
+                var interventionId = $(this).parent().data('id'),
+                        state = $(this).data('state'),
+                        that = this,
+                        url = '{{ path('update_vehicle_intervention_state', {'id': 'id'}) }}'.replace('id', interventionId);
 
                 $.ajax({
-                    url: '/app_dev.php/vehicle-intervention/update-state/' + interventionId,
+                    url: url,
                     data: 'state=' + state,
                     type: 'POST',
                     success: function(data) {
@@ -121,10 +122,12 @@
 
             $('.comment-modal .btn-success').click(function() {
                 var interventionId = $(this).closest('.comment-part').data('id'),
-                    comment = $(this).closest('.modal-content').find('textarea').val();
+                        comment = $(this).closest('.modal-content').find('textarea').val(),
+                        url = '{{ path('update_vehicle_intervention_state', {'id': 'id'}) }}'.replace('id', interventionId);
+
 
                 $.ajax({
-                    url: '/app_dev.php/vehicle-intervention/update-comment/' + interventionId,
+                    url: 'http://localhost:8888/sineo/web/app_dev.php/vehicle-intervention/update-comment/' + interventionId,
                     data: 'comment=' + comment,
                     type: 'POST'
                 });

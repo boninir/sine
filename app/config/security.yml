@@ -4,20 +4,45 @@ security:
 
     role_hierarchy:
         ROLE_USER:          ROLE_USER
-        ROLE_EXPERT:        ROLE_USER
-        ROLE_SUBCONTRACTOR: ROLE_USER
-        ROLE_MECHANICIAN:   ROLE_USER
-        ROLE_BODYBUILDER:   ROLE_USER
-        ROLE_PAINTER:       ROLE_USER
-        ROLE_CLEANER:       ROLE_USER
+
+        ROLE_EXPERT:
+            - ROLE_EXPERT
+            - ROLE_USER
+        ROLE_CONTROL:
+            - ROLE_CONTROL
+            - ROLE_USER
+        ROLE_TRANSPORTER:
+            - ROLE_TRANSPORTER
+            - ROLE_USER
+        ROLE_PHOTOGRAPHER:
+            - ROLE_PHOTOGRAPHER
+            - ROLE_USER
+        ROLE_MECHANICIAN:
+            - ROLE_MECHANICIAN
+            - ROLE_USER
+        ROLE_BODYBUILDER:
+            - ROLE_BODYBUILDER
+            - ROLE_USER
+        ROLE_BEAUTICIAN:
+            - ROLE_BEAUTICIAN
+            - ROLE_USER
+        ROLE_CLEANER:
+            - ROLE_CLEANER
+            - ROLE_USER
+
+        ROLE_MASTER_WORKSHOP:
+            - ROLE_MECHANICIAN
+            - ROLE_BEAUTICIAN
+            - ROLE_BODYBUILDER
+            - ROLE_CLEANER
+            - ROLE_PHOTOGRAPHER
+
         ROLE_ADMIN:
             - ROLE_USER
+            - ROLE_CONTROL
+            - ROLE_TRANSPORTER
             - ROLE_EXPERT
-            - ROLE_SUBCONTRACTOR
-            - ROLE_MECHANICIAN
-            - ROLE_BODYBUILDER
-            - ROLE_PAINTER
-            - ROLE_CLEANER
+            - ROLE_MASTER_WORKSHOP
 
     providers:
         user:
@@ -50,5 +75,11 @@ security:
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin, role: ROLE_ADMIN }
-        - { path: ^/, role: ROLE_USER }
+        - { path: ^/expertise/, role: ROLE_EXPERT }
+        - { path: ^/control/, role: ROLE_CONTROL }
+        - { path: ^/mechanical/, role: ROLE_MECHANICIAN }
+        - { path: ^/bodywork/, role: ROLE_BODYBUILDER }
+        - { path: ^/cosmetic/, role: ROLE_PAINTER }
+        - { path: ^/cleaning/, role: ROLE_CLEANER }
+        - { path: ^/photo/, role: ROLE_PHOTOGRAPHER }
+

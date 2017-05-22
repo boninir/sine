@@ -10,15 +10,90 @@ namespace AppBundle\Repository;
  */
 class VehicleInterventionRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByTypeInterventionTransition($transition)
+    public function findByTypeInterventionTransition($transition,$id)
     {
         return $this->createQueryBuilder('vi')
             ->join('vi.intervention', 'i')
             ->join('i.typeIntervention', 't')
-            ->where('t.transition = :transition')
+            ->where('t.transition = :transition and vi.vehicle = :id')
             ->setParameter('transition', $transition)
+            ->setParameter('id', $id)
             ->getQuery()
             ->execute()
         ;
     }
+    public function findTransitionByVehicle($vehicle)
+    {
+        return $this->createQueryBuilder('vi')
+            ->select('t.transition')
+            ->join('vi.intervention', 'i')
+            ->join('i.typeIntervention', 't')
+            ->where(' vi.vehicle = :id')
+            ->setParameter('id', $vehicle->getId())
+            ->groupBy('t.transition')
+            ->getQuery()
+            ->execute()
+            ;
+    }
+    public function  getNbTypeIntervention($type, $searchInterval){
+        return $this->createQueryBuilder('vi')
+            ->select('COUNT(vi)')
+            ->join('vi.intervention', 'i')
+            ->join('i.typeIntervention', 't')
+            ->join('vi.vehicle', 'v')
+            ->where('(v.state = \'"finish"\' or v.state = \'"validate"\') and (vi.endDate between :dateMin and :dateMax) and t.denomination = :type')
+            ->setParameter('type' , $type)
+            ->setParameter('dateMin' , $searchInterval[0])
+            ->setParameter('dateMax' , $searchInterval[1])
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getNbInterventions($searchInterval){
+        return $this->createQueryBuilder('vi')
+            ->select('COUNT(vi)')
+            ->join('vi.vehicle', 'v')
+            ->where('(v.state = \'"finish"\' or v.state = \'"validate"\') and (vi.endDate between :dateMin and :dateMax)')
+            ->setParameter('dateMin' , $searchInterval[0])
+            ->setParameter('dateMax' , $searchInterval[1])
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getAvgDurationInWorkshop($searchInterval)
+    {
+        return $this->createQueryBuilder('vi')
+            ->select('DATE_DIFF(MAX(vi.endDate),MIN(vi.startDate))')
+            ->join('vi.vehicle', 'v')
+            ->where('(v.state = \'"finish"\' or v.state = \'"validate"\') and (v.releaseDate between :dateMin and :dateMax)')
+            ->setParameter('dateMin' , $searchInterval[0])
+            ->setParameter('dateMax' , $searchInterval[1])
+            ->groupBy('vi.vehicle')
+            ->getQuery()
+            ->execute();
+    }
+    public function getNbVehicleInterBySearchAnswers($type, $searchInterval)
+    {
+        return $this->createQueryBuilder('vi')
+            ->select('COUNT(vi)')
+            ->join('vi.vehicle', 'v')
+            ->where('(v.state = \'"finish"\' or v.state = \'"validate"\') and (v.releaseDate between :dateMin and :dateMax) and vi.answers like :type')
+            ->setParameter('dateMin', $searchInterval[0])
+            ->setParameter('dateMax', $searchInterval[1])
+            ->setParameter('type', '%'.$type.'%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function getNbVehicleInterBySearchDenomination($type, $searchInterval)
+    {
+        return $this->createQueryBuilder('vi')
+            ->select('COUNT(vi)')
+            ->join('vi.intervention', 'i')
+            ->join('vi.vehicle', 'v')
+            ->where('(v.state = \'"finish"\' or v.state = \'"validate"\') and i.denomination like :type and (v.releaseDate between :dateMin and :dateMax)')
+            ->setParameter('dateMin', $searchInterval[0])
+            ->setParameter('dateMax', $searchInterval[1])
+            ->setParameter('type', '%'.$type.'%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
 }

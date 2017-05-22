@@ -25,17 +25,12 @@ class ControlController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        $form = $this->createForm(VehicleType::class, $vehicle);
 
         $interventions = $this->getDoctrine()
             ->getRepository(Intervention::class)
             ->findForVehicle($vehicle);
 
-        $formIntervention = $this->createForm(
-            ExpertiseType::class,
-            ['interventions' => $interventions],
-            ['vehicle' => $vehicle]
-        );
+        $form = $this->createForm(VehicleType::class, $vehicle);
 
         $form->handleRequest($request);
 
@@ -45,6 +40,12 @@ class ControlController extends Controller
 
             return $this->redirectToRoute('process-vehicle-control', ['id' => $vehicle->getId()]);
         }
+
+        $formIntervention = $this->createForm(
+            ExpertiseType::class,
+            ['interventions' => $interventions],
+            ['vehicle' => $vehicle]
+        );
 
         $formIntervention->handleRequest($request);
 
@@ -72,7 +73,6 @@ class ControlController extends Controller
                         ->addIntervention($interventionToSave->getData())
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
-                        ->setTime($interventionToSave['time']->getData())
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -125,12 +125,17 @@ class ControlController extends Controller
                 }
             }
 
-            $machine = $this->container->get('state_machine.vehicle');
-            $machine->can($vehicle, $typeToLaunch->getTransition());
-            $machine->apply($vehicle, $typeToLaunch->getTransition());
+            if($typeToLaunch!=null){
+                $machine = $this->container->get('state_machine.vehicle');
+                $machine->can($vehicle, $typeToLaunch->getTransition());
+                $machine->apply($vehicle, $typeToLaunch->getTransition());
 
-            $em->flush();
-            $this->addFlash('notice', 'Le contrôle à bien été enregistré.');
+                $vehicle->setControlDate(new \DateTime());
+                $em->persist($vehicle);
+
+                $em->flush();
+                $this->addFlash('notice', 'Le contrôle à bien été enregistré.');
+            }
 
             return $this->redirectToRoute('process', ['type' => 'control']);
         }

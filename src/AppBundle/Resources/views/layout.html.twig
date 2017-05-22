@@ -6,7 +6,25 @@
 
         {{ include("AppBundle:Home:header.html.twig") }}
 
-        {% block core %}{% endblock %}
+        <div class="container">
+            {% if type is defined %}
+                <div class="text-center">
+                    <h1>{{ type|trans }}{% if vehicle is defined %} / {{ vehicle.mark }} {{ vehicle.model }}{% endif %}</h1>
+                </div>
+            {% endif %}
+
+            <div class="container theme-showcase" role="main">
+                {% for flash_message in app.session.flashBag.get('notice') %}
+                    <div class="alert alert-success alert-dismissible flash-notice" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{ flash_message }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% block core %}
+            {% endblock %}
+        </div>
 
         {{ include("AppBundle:Home:footer.html.twig") }}
 

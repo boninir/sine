@@ -1,16 +1,74 @@
 {% extends 'AppBundle::layout.html.twig' %}
 
 {% block core %}
+    <div class="container center-block" role="main">
 
-    <div class="container theme-showcase" role="main">
-        {% for flash_message in app.session.flashBag.get('notice') %}
-            <div class="alert alert-success alert-dismissible flash-notice" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {{ flash_message }}
-            </div>
-        {% endfor %}
+
+        <input id="file" type="file" multiple />
+        <input type="submit" id="ajout" onclick="ajouter()" value="ajouter" class="btn-success">
+        <div id="append"></div>
+
     </div>
 
-    <div class="container">
-    </div>
-{% endblock %}
+<script type="text/javascript">
+
+    function ajouter() {
+       /* alert(reader.readAsDataURL());
+        $.ajax({
+            url: 'http://localhost:8888/sineo/web/app_dev.php/add-picture/' + {{ vehicle.id }},
+            data:
+            type: 'POST',
+
+        });
+*/
+
+
+        var fileName = document.getElementById('file').files[0].name;
+        var fileExtension = fileName.split('.')[1];
+        var file = document.getElementById('file').files[0];
+
+        if(fileName == null){
+            alert('veuillez selectionner une photo');
+        }else{
+            var allowedTypes = ['png', 'jpg', 'jpeg', 'gif'];
+            if (allowedTypes.indexOf(fileExtension) != -1) {
+                createThumbnail(file, fileExtension);
+            }else{
+                alert('L\'extension n\'est pas supportée');
+            }
+        }
+
+        function createThumbnail(file, fileExtension) {
+            var reader = new FileReader();
+            reader.addEventListener('load', function() {
+
+                $.ajax({
+                    url: 'http://localhost:8888/sineo/web/app_dev.php/add-picture/' + {{ vehicle.id }},
+                    type: 'POST'
+                });
+
+                var imgElement = document.createElement('img');
+                imgElement.src = this.result;
+                document.getElementById('append').appendChild(imgElement);
+            });
+            reader.readAsDataURL(file);
+        }
+    }
+
+
+
+    /*$.ajax({
+     url: 'http://localhost:8888/sineo/web/app_dev.php/add-picture/' + vehicleId,
+     data: 'file=' + file,
+     type: 'POST',
+     success: function(data) {
+     window.location.reload();
+     },
+     error: function(data) {
+     alert("La mise à jour de la date a échoué");
+     }
+     });
+</script>
+
+    {% endblock %}
+

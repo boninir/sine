@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Society;
 use AppBundle\Entity\User;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\RegisterType;
@@ -19,20 +20,26 @@ class SecurityController extends Controller
      */
     public function registerAction(Request $request)
     {
-        $user = new User();
-        $form = $this->createForm(RegisterType::class, $user);
+        $form = $this->createForm(RegisterType::class);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $password = $this->get('security.password_encoder')
-                ->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
-            $user->setRoles([User::ROLE_USER]);
+            $data = $form->getData();
 
-            $manager = $this->getDoctrine()->getManager();
-            $manager->persist($user);
-            $manager->flush();
+            $user = new User();
+            $society = new Society();
+
+            $passwordEncoded = $this->get('security.password_encoder')->encodePassword($user, $data['plainPassword']);
+
+            $society->setNom($data['societyName'])->setVille($data['societyCity']);
+
+            $user->setUsername($data['username'])->setMail($data['mail'])->setRoles($data['roles'])->setSociety($society)->setPassword($passwordEncoded);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($society);
+            $em->persist($user);
+            $em->flush();
 
             $this->get('session')->getFlashBag()->add('notice', "Votre compte a bien été créé");
 

@@ -1,0 +1,70 @@
+framework:
+    workflows:
+        intervention:
+            type: 'state_machine'
+            marking_store:
+                type: 'single_state'
+                arguments: ['state']
+            supports:
+                - AppBundle\Entity\VehicleIntervention
+            places:
+                - toStart
+                - inProgress
+                - done
+            transitions:
+                started:
+                    from: toStart
+                    to: inProgress
+                finished:
+                    from: inProgress
+                    to: done
+        vehicle:
+            type: 'state_machine'
+            marking_store:
+                type: 'single_state'
+                arguments: ['state']
+            supports:
+                - AppBundle\Entity\Vehicle
+            places:
+                - expertise
+                - transport
+                - road
+                - control
+                - mechanical
+                - bodywork
+                - cosmetic
+                - cleaning
+                - photo
+                - validation
+                - finish
+            transitions:
+                expertised:
+                    from: expertise
+                    to: transport
+                transported:
+                    from: transport
+                    to: road
+                arrived:
+                    from: road
+                    to: control
+                to_mechanical:
+                    from: [control, bodywork, cosmetic, cleaning]
+                    to: mechanical
+                to_bodywork:
+                    from: [control, mechanical, cosmetic, cleaning]
+                    to: bodywork
+                to_cosmetic:
+                    from: [control, bodywork, mechanical, cleaning]
+                    to: cosmetic
+                to_cleaning:
+                    from: [control, bodywork, cosmetic, mechanical]
+                    to: cleaning
+                to_photo:
+                    from: [control, bodywork, cosmetic, cleaning, mechanical]
+                    to: photo
+                validate:
+                    from: [photo]
+                    to: validation
+                terminated:
+                    from: validation
+                    to: finish

@@ -10,4 +10,32 @@ namespace AppBundle\Repository;
  */
 class VehicleRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getNbVehicles()
+    {
+        return $this->createQueryBuilder('v')
+            ->select('COUNT(v)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getNbSorties()
+    {
+        return $this->createQueryBuilder('v')
+            ->select('COUNT(v)')
+            ->where('v.state = :state')
+            ->setParameter('state', '"finish"')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function setSendDate($idVehicle)
+    {
+        return $this->createQueryBuilder('v')
+            ->update()
+            ->set('v.sendDate','CURRENT_TIMESTAMP()')
+            ->where('v.id = :idVehicle')
+            ->setParameter('idVehicle', $idVehicle)
+            ->getQuery()
+            ->execute();
+    }
 }

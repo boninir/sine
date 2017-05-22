@@ -8,10 +8,12 @@ use AppBundle\Entity\Vehicle;
 use AppBundle\Entity\VehicleIntervention;
 use AppBundle\Form\ExpertiseType;
 use AppBundle\Form\VehicleType;
+use Doctrine\ORM\Query\AST\Functions\CurrentDateFunction;
 use Doctrine\ORM\UnitOfWork;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Workflow\Exception\LogicException;
 
 class ExpertiseController extends Controller
@@ -38,14 +40,15 @@ class ExpertiseController extends Controller
 
             $this->addFlash(
                 'notice',
-                'Le véhicule a bien été enregistré.'
+                'Le véhicule a bien été enregistré, il peut désormais être expertisé.'
             );
 
-            return $this->redirectToRoute('process', ['type' => 'expertise']);
+            return $this->redirectToRoute('process-vehicle-expertise', ['id' => $vehicle->getId()]);
         }
 
         return $this->render('AppBundle:Expertise:addVehicle.html.twig', array(
             'form' => $form->createView(),
+            'type' => 'expertise',
         ));
     }
 
@@ -77,6 +80,8 @@ class ExpertiseController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $vehicle = $form->getData();
+            $em->persist($vehicle);
             $em->flush();
             $this->addFlash('notice', 'Les informations ont bien été mises à jour.');
 
@@ -88,9 +93,13 @@ class ExpertiseController extends Controller
         if ($formIntervention->isSubmitted() && $formIntervention->isValid()) {
             $interventionsToSave = $formIntervention->get('interventions');
 
+            if ($interventionsToSave[0]==null) {
+                $this->addFlash('notice', 'Veuillez renseigner au moins une intervention.');
+                return $this->redirectToRoute('process-vehicle-expertise', ['id' => $vehicle->getId()]);
+            }
+
             foreach ($interventionsToSave as $interventionToSave) {
-                $vehicleIntervention = $em
-                    ->getRepository(VehicleIntervention::class)
+                $vehicleIntervention = $em->getRepository(VehicleIntervention::class)
                     ->findOneBy([
                         'vehicle' => $vehicle,
                         'intervention' => $interventionToSave->getData()
@@ -104,12 +113,18 @@ class ExpertiseController extends Controller
                         ->setAnswers($interventionToSave['select']->getData())
                     ;
                 } elseif ($interventionToSave['select']->getData()) {
+                    $intervention = $interventionToSave->getData();
+
                     $vehicleIntervention = (new VehicleIntervention())
                         ->setVehicle($vehicle)
-                        ->addIntervention($interventionToSave->getData())
+                        ->addIntervention($intervention)
                         ->setComment($interventionToSave['comment']->getData())
                         ->setAnswers($interventionToSave['select']->getData())
-                        ->setTime($interventionToSave['time']->getData())
+                        ->setTime(
+                            UnitOfWork::STATE_MANAGED !== $em->getUnitOfWork()->getEntityState($intervention)
+                            ? $interventionToSave['time']->getData()
+                            : null
+                        )
                     ;
 
                     $em->persist($vehicleIntervention);
@@ -136,6 +151,10 @@ class ExpertiseController extends Controller
             $machine = $this->container->get('state_machine.vehicle');
             $machine->can($vehicle, 'expertised');
             $machine->apply($vehicle, 'expertised');
+
+            $vehicle->setExpertiseDate(new \DateTime());
+            $vehicle->setSendDate(new \DateTime());
+            $em->persist($vehicle);
 
             $em->flush();
             $this->addFlash('notice', "L'expertise à bien été enregistrée.");
